@@ -1,12 +1,17 @@
 # Firebase Configuration
 
 ## Collections & indexes
-Firestore composite indexes may be required for:
-- `articles` where `status == published` orderBy `publishedAt desc`
-- `articles` where `status == published` and `authorId == X` orderBy `publishedAt desc`
-- `articles` where `status == published` and `tags array-contains Y` orderBy `publishedAt desc`
+Composite indexes are required for the following queries (defined in `firebase/firestore.indexes.json`):
 
-Create them when the console prompts, or add to `firestore.indexes.json`.
+1. `articles`: `status` (ASC) + `publishedAt` (DESC)
+2. `articles`: `status` (ASC) + `authorId` (ASC) + `publishedAt` (DESC)
+3. `articles`: `status` (ASC) + `tags` (CONTAINS) + `publishedAt` (DESC)
+
+Deploy them with:
+```bash
+firebase deploy --only firestore:indexes
+```
+Or click the auto-generated links in the browser console when the error appears.
 
 ## Authentication
 Only Google provider is enabled. User profile is created on first sign-in. Role is assigned based on pending invitations: invited emails become `writer`, everyone else `reader`. Set your own user to `admin` manually.
