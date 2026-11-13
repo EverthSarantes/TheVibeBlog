@@ -92,8 +92,6 @@ export async function upsertUserProfile(uid, data) {
   if (snap.exists()) {
     await updateDoc(ref, { ...data, updatedAt: serverTimestamp() });
   } else {
-    await updateDoc(ref, {}).catch(() => {});
-    // create if not exists
     const { setDoc } = await import("firebase/firestore");
     await setDoc(ref, { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
   }
