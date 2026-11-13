@@ -14,23 +14,30 @@ import {
   increment,
   arrayUnion,
   arrayRemove,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import * as demo from "./demo";
+
+const isDemo = () => demo.isDemoMode();
 
 // ---------- Articles ----------
 
-export const articlesCol = () => collection(db, "articles");
+export const articlesCol = () => (isDemo() ? null : collection(db, "articles"));
 
-export async function getArticles({ tag, authorId, status = "published", max = 50 } = {}) {
-  let q = query(articlesCol(), where("status", "==", status), orderBy("publishedAt", "desc"), limit(max));
-  if (tag) q = query(articlesCol(), where("status", "==", status), where("tags", "array-contains", tag), orderBy("publishedAt", "desc"), limit(max));
-  if (authorId) q = query(articlesCol(), where("status", "==", status), where("authorId", "==", authorId), orderBy("publishedAt", "desc"), limit(max));
+export async function getArticles(opts = {}) {
+  if (isDemo()) return demo.demoGetArticles(opts);
+  const { tag, authorId, status = "published", max = 50 } = opts;
+  let q = query(collection(db, "articles"), where("status", "==", status), orderBy("publishedAt", "desc"), limit(max));
+  if (tag) q = query(collection(db, "articles"), where("status", "==", status), where("tags", "array-contains", tag), orderBy("publishedAt", "desc"), limit(max));
+  if (authorId) q = query(collection(db, "articles"), where("status", "==", status), where("authorId", "==", authorId), orderBy("publishedAt", "desc"), limit(max));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
 export async function getArticleBySlug(slug) {
-  const q = query(articlesCol(), where("slug", "==", slug), limit(1));
+  if (isDemo()) return demo.demoGetArticleBySlug(slug);
+  const q = query(collection(db, "articles"), where("slug", "==", slug), limit(1));
   const snap = await getDocs(q);
   if (snap.empty) return null;
   const d = snap.docs[0];
@@ -38,6 +45,7 @@ export async function getArticleBySlug(slug) {
 }
 
 export async function getArticle(id) {
+  if (isDemo()) return demo.demoGetArticle(id);
   const ref = doc(db, "articles", id);
   const snap = await getDoc(ref);
   if (!snap.exists()) return null;
@@ -45,7 +53,8 @@ export async function getArticle(id) {
 }
 
 export async function createArticle(data) {
-  const ref = await addDoc(articlesCol(), {
+  if (isDemo()) return demo.demoCreateArticle(data);
+  const ref = await addDoc(collection(db, "articles"), {
     ...data,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -58,6 +67,7 @@ export async function createArticle(data) {
 }
 
 export async function updateArticle(id, data) {
+  if (isDemo()) return demo.demoUpdateArticle(id, data);
   const ref = doc(db, "articles", id);
   await updateDoc(ref, {
     ...data,
@@ -67,37 +77,42 @@ export async function updateArticle(id, data) {
 }
 
 export async function deleteArticle(id) {
+  if (isDemo()) return demo.demoDeleteArticle(id);
   await deleteDoc(doc(db, "articles", id));
 }
 
 export async function incrementViews(id) {
+  if (isDemo()) return demo.demoIncrementViews(id);
   await updateDoc(doc(db, "articles", id), { views: increment(1) });
 }
 
 export async function clapArticle(id, count = 1) {
+  if (isDemo()) return demo.demoClapArticle(id, count);
   await updateDoc(doc(db, "articles", id), { claps: increment(count) });
 }
 
 // ---------- Users / Profiles ----------
 
 export async function getUserProfile(uid) {
+  if (isDemo()) return demo.demoGetUserProfile(uid);
   const snap = await getDoc(doc(db, "users", uid));
   if (!snap.exists()) return null;
   return { id: snap.id, ...snap.data() };
 }
 
 export async function upsertUserProfile(uid, data) {
+  if (isDemo()) return demo.demoUpsertUserProfile(uid, data);
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
   if (snap.exists()) {
     await updateDoc(ref, { ...data, updatedAt: serverTimestamp() });
   } else {
-    const { setDoc } = await import("firebase/firestore");
     await setDoc(ref, { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
   }
 }
 
 export async function getAllWriters() {
+  if (isDemo()) return demo.demoGetAllWriters();
   const q = query(collection(db, "users"), where("role", "in", ["writer", "admin"]));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
@@ -106,12 +121,14 @@ export async function getAllWriters() {
 // ---------- Comments ----------
 
 export async function getComments(articleId) {
+  if (isDemo()) return demo.demoGetComments(articleId);
   const q = query(collection(db, "articles", articleId, "comments"), orderBy("createdAt", "asc"));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
 export async function addComment(articleId, data) {
+  if (isDemo()) return demo.demoAddComment(articleId, data);
   const ref = await addDoc(collection(db, "articles", articleId, "comments"), {
     ...data,
     createdAt: serverTimestamp(),
@@ -121,6 +138,7 @@ export async function addComment(articleId, data) {
 }
 
 export async function deleteComment(articleId, commentId) {
+  if (isDemo()) return demo.demoDeleteComment(articleId, commentId);
   await deleteDoc(doc(db, "articles", articleId, "comments", commentId));
   await updateDoc(doc(db, "articles", articleId), { commentCount: increment(-1) });
 }
@@ -128,6 +146,7 @@ export async function deleteComment(articleId, commentId) {
 // ---------- Invitations ----------
 
 export async function createInvitation(email, invitedBy) {
+  if (isDemo()) return demo.demoCreateInvitation(email, invitedBy);
   const ref = await addDoc(collection(db, "invitations"), {
     email: email.toLowerCase(),
     invitedBy,
@@ -138,6 +157,7 @@ export async function createInvitation(email, invitedBy) {
 }
 
 export async function getInvitationByEmail(email) {
+  if (isDemo()) return demo.demoGetInvitationByEmail(email);
   const q = query(collection(db, "invitations"), where("email", "==", email.toLowerCase()), where("status", "==", "pending"), limit(1));
   const snap = await getDocs(q);
   if (snap.empty) return null;
@@ -145,12 +165,14 @@ export async function getInvitationByEmail(email) {
 }
 
 export async function acceptInvitation(id) {
+  if (isDemo()) return demo.demoAcceptInvitation(id);
   await updateDoc(doc(db, "invitations", id), { status: "accepted", acceptedAt: serverTimestamp() });
 }
 
 // ---------- Newsletter ----------
 
 export async function subscribeNewsletter(email) {
+  if (isDemo()) return demo.demoSubscribeNewsletter(email);
   const ref = collection(db, "newsletter");
   const q = query(ref, where("email", "==", email.toLowerCase()), limit(1));
   const snap = await getDocs(q);
@@ -160,6 +182,7 @@ export async function subscribeNewsletter(email) {
 }
 
 export async function getNewsletterSubscribers() {
+  if (isDemo()) return demo.demoGetNewsletterSubscribers();
   const snap = await getDocs(collection(db, "newsletter"));
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
@@ -167,7 +190,8 @@ export async function getNewsletterSubscribers() {
 // ---------- Tags ----------
 
 export async function getAllTags() {
-  const snap = await getDocs(articlesCol());
+  if (isDemo()) return demo.demoGetAllTags();
+  const snap = await getDocs(collection(db, "articles"));
   const set = new Set();
   snap.docs.forEach((d) => (d.data().tags || []).forEach((t) => set.add(t)));
   return Array.from(set).sort();
