@@ -75,7 +75,7 @@ export default function Header() {
                   <User className="w-8 h-8 p-1 rounded-full bg-gray-200 dark:bg-gray-700" />
                 )}
               </Link>
-              <button onClick={logout} className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white">
+              <button onClick={logout} aria-label="logout" className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white">
                 <LogOut className="w-4 h-4" />
               </button>
             </div>

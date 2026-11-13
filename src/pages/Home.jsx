@@ -14,10 +14,17 @@ export default function Home() {
 
   const load = async (tag = null) => {
     setLoading(true);
-    const [arts, ts] = await Promise.all([getArticles({ tag, max: 30 }), getAllTags()]);
-    setArticles(arts);
-    setTags(ts);
-    setLoading(false);
+    try {
+      const [arts, ts] = await Promise.all([getArticles({ tag, max: 30 }), getAllTags()]);
+      setArticles(arts || []);
+      setTags(ts || []);
+    } catch (e) {
+      console.error(e);
+      setArticles([]);
+      setTags([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { load(); }, []);

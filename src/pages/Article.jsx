@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getArticleBySlug, incrementViews, clapArticle, deleteArticle } from "../lib/firestore";
@@ -20,11 +21,15 @@ export default function Article() {
 
   useEffect(() => {
     (async () => {
-      const a = await getArticleBySlug(slug);
-      setArticle(a);
-      setLoading(false);
-      if (a) {
-        incrementViews(a.id).catch(() => {});
+      try {
+        const a = await getArticleBySlug(slug);
+        setArticle(a);
+        if (a) incrementViews(a.id).catch(() => {});
+      } catch (e) {
+        console.error(e);
+        setArticle(null);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [slug]);
@@ -98,7 +103,7 @@ export default function Article() {
 
       <div
         className="prose prose-lg dark:prose-invert max-w-none mt-8"
-        dangerouslySetInnerHTML={{ __html: article.content }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content || "") }}
       />
 
       <div className="mt-10 flex items-center gap-4">
