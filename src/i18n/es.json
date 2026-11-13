@@ -1,0 +1,94 @@
+{
+  "app": {
+    "name": "VibeBlog",
+    "tagline": "Ideas que vibran"
+  },
+  "nav": {
+    "home": "Inicio",
+    "write": "Escribir",
+    "dashboard": "Panel",
+    "profile": "Perfil",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "search": "Buscar artículos..."
+  },
+  "home": {
+    "title": "Últimos artículos",
+    "empty": "Aún no hay artículos publicados.",
+    "readMore": "Leer más",
+    "featured": "Destacados"
+  },
+  "article": {
+    "by": "por",
+    "minRead": "min de lectura",
+    "claps": "aplausos",
+    "comments": "comentarios",
+    "share": "Compartir",
+    "subscribe": "Suscribirse al newsletter",
+    "related": "Artículos relacionados",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Seguro que quieres eliminar este artículo?",
+    "views": "vistas"
+  },
+  "editor": {
+    "title": "Título del artículo",
+    "subtitle": "Subtítulo o descripción breve",
+    "content": "Escribe tu historia...",
+    "publish": "Publicar",
+    "saveDraft": "Guardar borrador",
+    "tags": "Etiquetas (separadas por coma)",
+    "coverImage": "URL de imagen de portada",
+    "status": "Estado",
+    "published": "Publicado",
+    "draft": "Borrador"
+  },
+  "auth": {
+    "loginTitle": "Bienvenido a VibeBlog",
+    "loginSubtitle": "Inicia sesión para leer y escribir",
+    "loginGoogle": "Continuar con Google",
+    "reader": "Lector",
+    "writer": "Escritor",
+    "admin": "Administrador"
+  },
+  "comments": {
+    "placeholder": "Escribe un comentario...",
+    "submit": "Comentar",
+    "loginToComment": "Inicia sesión para comentar",
+    "empty": "Sé el primero en comentar"
+  },
+  "newsletter": {
+    "title": "Suscríbete al newsletter",
+    "placeholder": "tu@email.com",
+    "button": "Suscribirse",
+    "success": "¡Suscrito correctamente!",
+    "already": "Ya estás suscrito"
+  },
+  "dashboard": {
+    "title": "Panel de control",
+    "myArticles": "Mis artículos",
+    "invitations": "Invitaciones",
+    "inviteWriter": "Invitar escritor",
+    "invitePlaceholder": "email@ejemplo.com",
+    "inviteSent": "Invitación enviada",
+    "subscribers": "Suscriptores",
+    "noArticles": "Aún no has escrito ningún artículo"
+  },
+  "profile": {
+    "bio": "Biografía",
+    "articles": "Artículos",
+    "save": "Guardar",
+    "saved": "Guardado"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "search": "Buscar"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados"
+  }
+}

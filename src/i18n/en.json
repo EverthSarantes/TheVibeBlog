@@ -1,0 +1,94 @@
+{
+  "app": {
+    "name": "VibeBlog",
+    "tagline": "Ideas that vibrate"
+  },
+  "nav": {
+    "home": "Home",
+    "write": "Write",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "search": "Search articles..."
+  },
+  "home": {
+    "title": "Latest articles",
+    "empty": "No articles published yet.",
+    "readMore": "Read more",
+    "featured": "Featured"
+  },
+  "article": {
+    "by": "by",
+    "minRead": "min read",
+    "claps": "claps",
+    "comments": "comments",
+    "share": "Share",
+    "subscribe": "Subscribe to newsletter",
+    "related": "Related articles",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this article?",
+    "views": "views"
+  },
+  "editor": {
+    "title": "Article title",
+    "subtitle": "Subtitle or short description",
+    "content": "Write your story...",
+    "publish": "Publish",
+    "saveDraft": "Save draft",
+    "tags": "Tags (comma separated)",
+    "coverImage": "Cover image URL",
+    "status": "Status",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "auth": {
+    "loginTitle": "Welcome to VibeBlog",
+    "loginSubtitle": "Sign in to read and write",
+    "loginGoogle": "Continue with Google",
+    "reader": "Reader",
+    "writer": "Writer",
+    "admin": "Admin"
+  },
+  "comments": {
+    "placeholder": "Write a comment...",
+    "submit": "Comment",
+    "loginToComment": "Sign in to comment",
+    "empty": "Be the first to comment"
+  },
+  "newsletter": {
+    "title": "Subscribe to newsletter",
+    "placeholder": "you@email.com",
+    "button": "Subscribe",
+    "success": "Successfully subscribed!",
+    "already": "Already subscribed"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myArticles": "My articles",
+    "invitations": "Invitations",
+    "inviteWriter": "Invite writer",
+    "invitePlaceholder": "email@example.com",
+    "inviteSent": "Invitation sent",
+    "subscribers": "Subscribers",
+    "noArticles": "You haven't written any articles yet"
+  },
+  "profile": {
+    "bio": "Bio",
+    "articles": "Articles",
+    "save": "Save",
+    "saved": "Saved"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "back": "Back",
+    "search": "Search"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  }
+}
