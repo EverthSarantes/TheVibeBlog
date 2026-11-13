@@ -24,7 +24,26 @@ export default function Article() {
       try {
         const a = await getArticleBySlug(slug);
         setArticle(a);
-        if (a) incrementViews(a.id).catch(() => {});
+        if (a) {
+          document.title = `${a.title} — VibeBlog`;
+          // JSON-LD structured data
+          const script = document.createElement("script");
+          script.type = "application/ld+json";
+          script.id = "article-jsonld";
+          script.text = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: a.title,
+            description: a.subtitle || "",
+            author: { "@type": "Person", name: a.authorName },
+            datePublished: a.publishedAt,
+            image: a.coverImage || "",
+          });
+          const existing = document.getElementById("article-jsonld");
+          if (existing) existing.remove();
+          document.head.appendChild(script);
+          incrementViews(a.id).catch(() => {});
+        }
       } catch (e) {
         console.error(e);
         setArticle(null);
@@ -32,6 +51,7 @@ export default function Article() {
         setLoading(false);
       }
     })();
+    return () => { document.title = "VibeBlog"; };
   }, [slug]);
 
   const handleClap = async () => {

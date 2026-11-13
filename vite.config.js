@@ -8,5 +8,11 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     base,
     build: { outDir: "dist" },
+    test: {
+      globals: true,
+      environment: "jsdom",
+      setupFiles: "./src/test/setup.js",
+      css: true,
+    },
   };
 });

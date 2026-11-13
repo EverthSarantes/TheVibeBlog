@@ -28,11 +28,19 @@ export const articlesCol = () => (isDemo() ? null : collection(db, "articles"));
 export async function getArticles(opts = {}) {
   if (isDemo()) return demo.demoGetArticles(opts);
   const { tag, authorId, status = "published", max = 50 } = opts;
-  let q = query(collection(db, "articles"), where("status", "==", status), orderBy("publishedAt", "desc"), limit(max));
-  if (tag) q = query(collection(db, "articles"), where("status", "==", status), where("tags", "array-contains", tag), orderBy("publishedAt", "desc"), limit(max));
-  if (authorId) q = query(collection(db, "articles"), where("status", "==", status), where("authorId", "==", authorId), orderBy("publishedAt", "desc"), limit(max));
+  // Avoid composite indexes: filter server-side, sort client-side.
+  let constraints = [where("status", "==", status)];
+  if (tag) constraints.push(where("tags", "array-contains", tag));
+  if (authorId) constraints.push(where("authorId", "==", authorId));
+  const q = query(collection(db, "articles"), ...constraints, limit(max * 2));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  list.sort((a, b) => {
+    const da = a.publishedAt?.toDate ? a.publishedAt.toDate() : (a.publishedAt ? new Date(a.publishedAt) : new Date(0));
+    const db_ = b.publishedAt?.toDate ? b.publishedAt.toDate() : (b.publishedAt ? new Date(b.publishedAt) : new Date(0));
+    return db_ - da;
+  });
+  return list.slice(0, max);
 }
 
 export async function getArticleBySlug(slug) {
