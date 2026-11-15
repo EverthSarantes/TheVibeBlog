@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Article from "./pages/Article";
 import Editor from "./pages/Editor";
 import Dashboard from "./pages/Dashboard";
+import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Search from "./pages/Search";
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/write" element={<Editor />} />
           <Route path="/edit/:id" element={<Editor />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/u/:uid" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/search" element={<Search />} />

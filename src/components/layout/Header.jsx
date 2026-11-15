@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import Button from "../ui/Button";
-import { PenSquare, Sun, Moon, User, LogOut, Search } from "lucide-react";
+import { PenSquare, Sun, Moon, User, LogOut, Search, Shield } from "lucide-react";
 
 export default function Header() {
   const { t, i18n } = useTranslation();
-  const { user, profile, isWriter, login, logout } = useAuth();
+  const { user, profile, isWriter, isAdmin, login, logout } = useAuth();
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
 
@@ -68,6 +68,11 @@ export default function Header() {
               <Link to="/dashboard" className="text-sm text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors hidden sm:block">
                 {t("nav.dashboard")}
               </Link>
+              {isAdmin && (
+                <Link to="/admin" className="text-sm text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors hidden sm:flex items-center gap-1">
+                  <Shield className="w-3.5 h-3.5" /> Admin
+                </Link>
+              )}
               <Link to={`/u/${profile?.uid || user.uid}`} className="block">
                 {(profile?.photoURL || user?.photoURL) ? (
                   <img src={profile?.photoURL || user?.photoURL} alt="" className="w-8 h-8 rounded-full ring-1 ring-ink-200 dark:ring-ink-700 object-cover" />

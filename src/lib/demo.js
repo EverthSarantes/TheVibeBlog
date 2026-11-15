@@ -195,6 +195,30 @@ export async function demoGetAllWriters() {
   return Object.values(state.users).filter((u) => u.role === "writer" || u.role === "admin").map(toDoc);
 }
 
+export async function demoGetAllUsers() {
+  return Object.values(state.users).map(toDoc);
+}
+
+export async function demoUpdateUserRole(uid, role) {
+  if (state.users[uid]) {
+    state.users[uid].role = role;
+    state.users[uid].updatedAt = ts();
+    saveState(state);
+  }
+}
+
+export async function demoGetAllArticlesAdmin(max = 100) {
+  return Object.values(state.articles).slice(0, max).map(toDoc);
+}
+
+export async function demoSetArticleStatus(id, status) {
+  if (state.articles[id]) {
+    state.articles[id].status = status;
+    state.articles[id].updatedAt = ts();
+    saveState(state);
+  }
+}
+
 // Comments
 export async function demoGetComments(articleId) {
   return (state.comments[articleId] || []).map(toDoc);

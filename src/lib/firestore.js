@@ -140,6 +140,28 @@ export async function getAllWriters() {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
+export async function getAllUsers() {
+  if (isDemo()) return demo.demoGetAllUsers();
+  const snap = await getDocs(collection(db, "users"));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
+export async function updateUserRole(uid, role) {
+  if (isDemo()) return demo.demoUpdateUserRole(uid, role);
+  await updateDoc(doc(db, "users", uid), { role, updatedAt: serverTimestamp() });
+}
+
+export async function getAllArticlesAdmin(max = 100) {
+  if (isDemo()) return demo.demoGetAllArticlesAdmin(max);
+  const snap = await getDocs(query(collection(db, "articles"), limit(max)));
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
+export async function setArticleStatus(id, status) {
+  if (isDemo()) return demo.demoSetArticleStatus(id, status);
+  await updateDoc(doc(db, "articles", id), { status, updatedAt: serverTimestamp() });
+}
+
 // ---------- Comments ----------
 
 export async function getComments(articleId) {
