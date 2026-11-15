@@ -48,7 +48,7 @@ export async function getArticleBySlug(slug) {
   const cached = cache.cacheGet(cacheKey);
   if (cached) return cached;
 
-  const q = query(collection(db, "articles"), where("slug", "==", slug), limit(1));
+  const q = query(collection(db, "articles"), where("slug", "==", slug), where("status", "==", "published"), limit(1));
   const snap = await getDocs(q);
   if (snap.empty) return null;
   const d = snap.docs[0];
@@ -366,7 +366,8 @@ export async function getAllTags() {
   const cached = cache.cacheGet(cacheKey);
   if (cached) return cached;
 
-  const snap = await getDocs(collection(db, "articles"));
+  const q = query(collection(db, "articles"), where("status", "==", "published"));
+  const snap = await getDocs(q);
   const set = new Set();
   snap.docs.forEach((d) => (d.data().tags || []).forEach((t) => set.add(t)));
   const result = Array.from(set).sort();
