@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const isDemo = !import.meta.env.VITE_FIREBASE_API_KEY;
@@ -26,6 +26,14 @@ if (!isDemo) {
   storage = getStorage(app);
   googleProvider = new GoogleAuthProvider();
   googleProvider.setCustomParameters({ prompt: "select_account" });
+
+  // Enable offline persistence to reduce Firestore reads.
+  // Falls back to single-tab if multi-tab fails.
+  enableMultiTabIndexedDbPersistence(db).catch(() => {
+    enableIndexedDbPersistence(db).catch(() => {
+      console.warn("Firestore persistence unavailable");
+    });
+  });
 }
 
 export { auth, db, storage, googleProvider, isDemo };
