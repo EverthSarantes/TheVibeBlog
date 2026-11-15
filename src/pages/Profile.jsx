@@ -6,6 +6,7 @@ import { getUserProfile, getArticles, upsertUserProfile } from "../lib/firestore
 import ArticleCard from "../components/article/ArticleCard";
 import Input from "../components/ui/Input";
 import Textarea from "../components/ui/Textarea";
+import ImageUploader from "../components/ui/ImageUploader";
 import Button from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 
@@ -19,6 +20,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [bio, setBio] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -29,6 +31,7 @@ export default function Profile() {
         setProfile(p);
         setBio(p?.bio || "");
         setDisplayName(p?.displayName || "");
+        setPhotoURL(p?.photoURL || "");
         const arts = await getArticles({ authorId: uid, status: "published", max: 30 });
         setArticles(arts || []);
       } catch (e) {
@@ -42,7 +45,7 @@ export default function Profile() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await upsertUserProfile(uid, { displayName, bio });
+      await upsertUserProfile(uid, { displayName, bio, photoURL });
       await refreshProfile();
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
@@ -59,11 +62,11 @@ export default function Profile() {
   return (
     <div className="container-page py-12 md:py-16">
       <div className="flex flex-col md:flex-row items-start gap-8 mb-12 pb-12 border-b border-ink-200 dark:border-ink-800">
-        {profile.photoURL ? (
-          <img src={profile.photoURL} alt="" className="w-28 h-28 rounded-full ring-1 ring-ink-200 dark:ring-ink-700" />
+        {(photoURL || profile.photoURL) ? (
+          <img src={photoURL || profile.photoURL} alt="" className="w-28 h-28 rounded-full ring-1 ring-ink-200 dark:ring-ink-700 object-cover" />
         ) : (
           <div className="w-28 h-28 rounded-full bg-ink-200 dark:bg-ink-700 flex items-center justify-center">
-            <span className="font-display text-4xl text-ink-600 dark:text-ink-300">{profile.displayName?.[0]}</span>
+            <span className="font-display text-4xl text-ink-600 dark:text-ink-300">{(displayName || profile.displayName)?.[0]}</span>
           </div>
         )}
         <div className="flex-1 min-w-0">
@@ -77,6 +80,11 @@ export default function Profile() {
         <section className="mb-12 p-6 rounded-md border border-ink-200 dark:border-ink-800">
           <h2 className="font-display text-xl font-bold mb-4 text-ink-900 dark:text-white">Edit profile</h2>
           <div className="space-y-4 max-w-md">
+            <ImageUploader
+              value={photoURL}
+              onChange={setPhotoURL}
+              label="Profile photo"
+            />
             <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} label="Name" />
             <Textarea value={bio} onChange={(e) => setBio(e.target.value)} label={t("profile.bio")} rows={3} />
             <div className="flex items-center gap-3">

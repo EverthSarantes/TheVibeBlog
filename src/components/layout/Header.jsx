@@ -69,8 +69,8 @@ export default function Header() {
                 {t("nav.dashboard")}
               </Link>
               <Link to={`/u/${profile?.uid || user.uid}`} className="block">
-                {profile?.photoURL ? (
-                  <img src={profile.photoURL} alt="" className="w-8 h-8 rounded-full ring-1 ring-ink-200 dark:ring-ink-700" />
+                {(profile?.photoURL || user?.photoURL) ? (
+                  <img src={profile?.photoURL || user?.photoURL} alt="" className="w-8 h-8 rounded-full ring-1 ring-ink-200 dark:ring-ink-700 object-cover" />
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-ink-200 dark:bg-ink-700 flex items-center justify-center">
                     <User className="w-4 h-4 text-ink-600 dark:text-ink-300" />
