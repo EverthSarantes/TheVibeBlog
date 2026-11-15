@@ -67,9 +67,11 @@ export default function Header() {
 
           {user ? (
             <div className="flex items-center gap-3">
-              <Link to="/dashboard" className="text-sm text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors hidden sm:block">
-                {t("nav.dashboard")}
-              </Link>
+              {isWriter && (
+                <Link to="/dashboard" className="text-sm text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors hidden sm:block">
+                  {t("nav.dashboard")}
+                </Link>
+              )}
               {isAdmin && (
                 <Link to="/admin" className="text-sm text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors hidden sm:flex items-center gap-1">
                   <Shield className="w-3.5 h-3.5" /> Admin
