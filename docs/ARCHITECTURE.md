@@ -29,4 +29,11 @@
 `email, createdAt`
 
 ## Routing
-`/`, `/article/:slug`, `/write`, `/edit/:id`, `/dashboard`, `/u/:uid`, `/login`, `/search`.
+`/`, `/article/:slug`, `/write`, `/edit/:id`, `/dashboard`, `/admin`, `/u/:uid`, `/login`, `/search`, `/privacy`.
+
+## Key features
+- **Likes**: Toggle like per user (stored in `likedBy` array on article). One like per user.
+- **Image upload**: Images compressed to base64 (max 2400px, WebP/JPEG 85%) and stored in Firestore. No Firebase Storage needed.
+- **Auto-save drafts**: Editor auto-saves to localStorage every second. Restores on page reload.
+- **Admin panel**: User role management, article moderation (draft/publish/delete), comment deletion.
+- **Privacy policy**: `/privacy` page disclosing AI-generated code and data collection.

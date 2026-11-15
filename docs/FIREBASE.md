@@ -21,3 +21,19 @@ Used for optional cover images (currently URL-based). Rules allow reads for all 
 
 ## Cost
 Spark (free) plan covers typical personal blog traffic. Upgrade only if needed.
+
+## Email services (not included by default)
+The blog does NOT send emails automatically. Invitations and newsletters are stored in Firestore only.
+
+To add email functionality, you would need:
+1. **Firebase Cloud Functions** (requires Blaze/paid plan) + an email provider:
+   - Resend (resend.com) — Free: 3,000 emails/month
+   - SendGrid (sendgrid.com) — Free: 100 emails/day
+   - Mailgun (mailgun.com) — Free tier available
+2. Or use an external service:
+   - Mailchimp (mailchimp.com) — Free: 500 contacts, 1,000 sends/month
+   - ConvertKit (convertkit.com) — Free: 10,000 subscribers
+   - Buttondown (buttondown.email) — Free: 100 subscribers
+
+To implement, create a Cloud Function that triggers on new invitation/newsletter subscription
+and calls the email provider's API.

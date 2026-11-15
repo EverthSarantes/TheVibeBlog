@@ -39,3 +39,15 @@ npm run dev
 
 ## 7. Invite writers
 From the Dashboard, enter an email and send an invitation. When that person signs in with Google using that email, they become a writer.
+
+### How invitations work (manual process)
+- **No emails are sent automatically.** The invitation is stored in Firestore (`invitations` collection).
+- You (the admin) must **manually notify** the invited person (via WhatsApp, personal email, etc.) that they can sign in to the blog.
+- When they sign in with Google using the invited email, the system detects the pending invitation and assigns them the "writer" role.
+- To automate this, you would need Firebase Cloud Functions + an email provider (SendGrid, Resend, Mailgun). See `docs/FIREBASE.md` for details.
+
+## 8. Newsletter
+- Subscribers enter their email on any article page.
+- Emails are stored in Firestore (`newsletter` collection).
+- **No emails are sent automatically.** To send newsletters, you need to integrate an email service (Mailchimp, ConvertKit, Buttondown, Resend).
+- You can view the subscriber list in the Dashboard.
