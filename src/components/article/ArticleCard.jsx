@@ -12,12 +12,13 @@ export default function ArticleCard({ article }) {
     <article className="group">
       <Link to={`/article/${article.slug}`} className="block">
         {article.coverImage ? (
-          <div className="aspect-[4/3] overflow-hidden rounded-md mb-4 bg-ink-100 dark:bg-ink-800">
+          <div className="aspect-[3/2] overflow-hidden rounded-md mb-4 bg-ink-100 dark:bg-ink-800">
             <img
               src={article.coverImage}
               alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-smooth"
+              className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-smooth"
               loading="lazy"
+              decoding="async"
             />
           </div>
         ) : (

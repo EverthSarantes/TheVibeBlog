@@ -32,7 +32,7 @@ export default function ImageUploader({ value, onChange, label }) {
       {label && <label className="block text-sm font-sans font-medium text-ink-700 dark:text-ink-300 mb-1.5">{label}</label>}
       {value ? (
         <div className="relative rounded-md overflow-hidden border border-ink-200 dark:border-ink-700">
-          <img src={value} alt="Cover" className="w-full h-48 object-cover" />
+          <img src={value} alt="Cover" className="w-full h-48 object-contain bg-ink-50 dark:bg-ink-900" />
           <button
             type="button"
             onClick={handleRemove}
