@@ -94,6 +94,20 @@
     margin: 2rem 0;
   }
 
+  /* TipTap editor: make the whole area clickable */
+  .ProseMirror {
+    min-height: 280px;
+    outline: none;
+  }
+
+  .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #9a9a9a;
+    pointer-events: none;
+    height: 0;
+  }
+
   .article-prose pre {
     background: #f2f2f2;
     color: #1a1a1a;

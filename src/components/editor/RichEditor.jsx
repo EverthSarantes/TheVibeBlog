@@ -16,7 +16,7 @@ import {
 export default function RichEditor({ content, onChange, placeholder }) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false, underline: false }),
       Underline,
       Image.configure({ inline: false, allowBase64: true }),
       Link.configure({ openOnClick: false }),
@@ -75,7 +75,10 @@ export default function RichEditor({ content, onChange, placeholder }) {
   };
 
   return (
-    <div className="border border-ink-200 dark:border-ink-700 rounded-md overflow-hidden bg-surface dark:bg-surface-dark">
+    <div
+      className="border border-ink-200 dark:border-ink-700 rounded-md overflow-hidden bg-surface dark:bg-surface-dark cursor-text"
+      onClick={() => editor?.chain().focus().run()}
+    >
       <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-ink-200 dark:border-ink-700 bg-ink-50 dark:bg-ink-900">
         <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Bold"><Bold className="w-4 h-4" /></ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} title="Italic"><Italic className="w-4 h-4" /></ToolbarButton>
@@ -103,7 +106,7 @@ export default function RichEditor({ content, onChange, placeholder }) {
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo"><Undo className="w-4 h-4" /></ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo"><Redo className="w-4 h-4" /></ToolbarButton>
       </div>
-      <EditorContent editor={editor} className="article-prose p-6 min-h-[300px] focus:outline-none" />
+      <EditorContent editor={editor} className="article-prose p-6 min-h-[300px] focus:outline-none [&_.ProseMirror]:min-h-[280px] [&_.ProseMirror]:cursor-text" />
     </div>
   );
 }
