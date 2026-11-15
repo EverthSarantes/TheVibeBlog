@@ -17,13 +17,13 @@ export default function Privacy() {
           <AlertTriangle className="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
           <div>
             <h2 className="font-display text-xl font-bold text-yellow-800 dark:text-yellow-200 mb-2">
-              ⚠️ Este sitio fue creado 100% por Inteligencia Artificial
+              Este sitio fue creado 100% por Inteligencia Artificial
             </h2>
             <p className="text-yellow-800 dark:text-yellow-200 font-serif leading-relaxed">
               VibeBlog fue desarrollado completamente por IA (vibecoding). <strong>Ningún ser humano ha revisado,
               auditado ni verificado el código fuente.</strong> Esto es parte de la gracia y el experimento de este blog.
-              Sin embargo, esto significa que <strong>siempre existe el riesgo de vulnerabilidades de seguridad</strong>
-              no detectadas. Si decides iniciar sesión, lo haces bajo tu propia responsabilidad y asumiendo ese riesgo.
+              Sin embargo, esto significa que <strong> siempre existe el riesgo de vulnerabilidades de seguridad</strong> no detectadas. 
+              Si decides iniciar sesión, lo haces bajo tu propia responsabilidad y asumiendo ese riesgo.
             </p>
             <p className="text-yellow-800 dark:text-yellow-200 font-serif leading-relaxed mt-3">
               <strong>Solo inicia sesión si confías en la IA y aceptas los riesgos.</strong> Si no te sientes cómodo,
@@ -36,7 +36,7 @@ export default function Privacy() {
       {/* Data collected */}
       <section className="mb-10">
         <h2 className="font-display text-2xl font-bold text-ink-900 dark:text-white mb-4 flex items-center gap-2">
-          <Database className="w-5 h-5" /> Datos que almacenamos
+          Datos que almacenamos
         </h2>
         <p className="text-ink-700 dark:text-ink-300 font-serif leading-relaxed mb-4">
           Cuando inicias sesión con Google, almacenamos la siguiente información en Firebase Firestore:
@@ -76,7 +76,7 @@ export default function Privacy() {
       {/* What could be exposed */}
       <section className="mb-10">
         <h2 className="font-display text-2xl font-bold text-ink-900 dark:text-white mb-4 flex items-center gap-2">
-          <Eye className="w-5 h-5" /> Qué se podría filtrar en caso de vulnerabilidad
+          Qué se podría filtrar en caso de vulnerabilidad
         </h2>
         <p className="text-ink-700 dark:text-ink-300 font-serif leading-relaxed mb-4">
           Si existiera una vulnerabilidad de seguridad en el código (algo posible dado que fue generado por IA
@@ -117,7 +117,7 @@ export default function Privacy() {
       {/* Security measures */}
       <section className="mb-10">
         <h2 className="font-display text-2xl font-bold text-ink-900 dark:text-white mb-4 flex items-center gap-2">
-          <Lock className="w-5 h-5" /> Medidas de seguridad implementadas
+          Medidas de seguridad implementadas
         </h2>
         <ul className="space-y-3 text-ink-700 dark:text-ink-300 font-serif">
           <li className="flex items-start gap-2">
@@ -154,7 +154,7 @@ export default function Privacy() {
       {/* User rights */}
       <section className="mb-10">
         <h2 className="font-display text-2xl font-bold text-ink-900 dark:text-white mb-4 flex items-center gap-2">
-          <Shield className="w-5 h-5" /> Tus derechos
+          Tus derechos
         </h2>
         <ul className="space-y-3 text-ink-700 dark:text-ink-300 font-serif">
           <li className="flex items-start gap-2">
