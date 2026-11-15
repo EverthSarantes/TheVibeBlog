@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Search from "./pages/Search";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/u/:uid" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
