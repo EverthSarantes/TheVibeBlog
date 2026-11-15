@@ -24,6 +24,7 @@ vi.mock("../lib/demo", () => ({
   demoDeleteArticle: async () => {},
   demoIncrementViews: async () => {},
   demoClapArticle: async () => {},
+  demoToggleLike: async () => true,
   demoGetUserProfile: async () => ({ uid: "test-user", displayName: "Test User", role: "admin", bio: "" }),
   demoUpsertUserProfile: async () => {},
   demoGetAllWriters: async () => [],

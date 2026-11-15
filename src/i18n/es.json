@@ -86,7 +86,8 @@
     "cancel": "Cancelar",
     "confirm": "Confirmar",
     "back": "Volver",
-    "search": "Buscar"
+    "search": "Buscar",
+    "copied": "¡Enlace copiado!"
   },
   "footer": {
     "rights": "Todos los derechos reservados"

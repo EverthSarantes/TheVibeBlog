@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getArticleBySlug, incrementViews, clapArticle, deleteArticle } from "../lib/firestore";
+import { getArticleBySlug, incrementViews, toggleLike, deleteArticle } from "../lib/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import CommentSection from "../components/comments/CommentSection";
 import Spinner from "../components/ui/Spinner";
@@ -17,13 +17,17 @@ export default function Article() {
   const navigate = useNavigate();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [clapped, setClapped] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [shareMsg, setShareMsg] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const a = await getArticleBySlug(slug);
         setArticle(a);
+        if (a && user) {
+          setLiked((a.likedBy || []).includes(user.uid));
+        }
         if (a) {
           document.title = `${a.title} — VibeBlog`;
           // JSON-LD structured data
@@ -54,11 +58,28 @@ export default function Article() {
     return () => { document.title = "VibeBlog"; };
   }, [slug]);
 
-  const handleClap = async () => {
-    if (!article || clapped) return;
-    setClapped(true);
-    await clapArticle(article.id, 1);
-    setArticle((prev) => ({ ...prev, claps: (prev.claps || 0) + 1 }));
+  useEffect(() => {
+    if (article && user) {
+      setLiked((article.likedBy || []).includes(user.uid));
+    } else if (!user) {
+      setLiked(false);
+    }
+  }, [user, article]);
+
+  const handleLike = async () => {
+    if (!article || !user) {
+      // Redirect to login or show message
+      return;
+    }
+    const newLiked = await toggleLike(article.id, user.uid);
+    setLiked(newLiked);
+    setArticle((prev) => ({
+      ...prev,
+      claps: newLiked ? (prev.claps || 0) + 1 : Math.max(0, (prev.claps || 0) - 1),
+      likedBy: newLiked
+        ? [...(prev.likedBy || []), user.uid]
+        : (prev.likedBy || []).filter((u) => u !== user.uid),
+    }));
   };
 
   const handleDelete = async () => {
@@ -74,11 +95,34 @@ export default function Article() {
   const readTime = Math.max(1, Math.round((article.content?.replace(/<[^>]*>/g, "").split(/\s+/).length || 0) / 200));
   const canEdit = user && (user.uid === article.authorId || isAdmin);
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({ title: article.title, url: window.location.href }).catch(() => {});
-    } else {
-      navigator.clipboard?.writeText(window.location.href);
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: article.title, url: window.location.href });
+        setShareMsg(true);
+        setTimeout(() => setShareMsg(false), 2000);
+        return;
+      }
+      // Fallback: try clipboard API
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+      } catch (e) {
+        // Fallback for older browsers / unfocused documents
+        const textarea = document.createElement("textarea");
+        textarea.value = window.location.href;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      setShareMsg(true);
+      setTimeout(() => setShareMsg(false), 2000);
+    } catch (e) {
+      if (e.name !== "AbortError") {
+        console.error(e);
+      }
     }
   };
 
@@ -162,11 +206,12 @@ export default function Article() {
       {/* Actions */}
       <div className="mt-12 flex items-center gap-4 pt-8 border-t border-ink-200 dark:border-ink-800">
         <button
-          onClick={handleClap}
-          disabled={clapped}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-md border transition-colors font-sans text-sm font-medium ${clapped ? "bg-green-50 border-green-300 text-green-700 dark:bg-green-900/20 dark:border-green-700 dark:text-green-400" : "border-ink-300 dark:border-ink-600 text-ink-700 dark:text-ink-300 hover:bg-ink-50 dark:hover:bg-ink-800"}`}
+          onClick={handleLike}
+          disabled={!user}
+          title={!user ? t("comments.loginToComment") : ""}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-md border transition-colors font-sans text-sm font-medium ${liked ? "bg-red-50 border-red-300 text-red-700 dark:bg-red-900/20 dark:border-red-700 dark:text-red-400" : "border-ink-300 dark:border-ink-600 text-ink-700 dark:text-ink-300 hover:bg-ink-50 dark:hover:bg-ink-800"} disabled:opacity-50 disabled:cursor-not-allowed`}
         >
-          <Heart className={`w-4 h-4 ${clapped ? "fill-current" : ""}`} />
+          <Heart className={`w-4 h-4 transition-transform ${liked ? "fill-current scale-110" : ""}`} />
           {article.claps || 0} {t("article.claps")}
         </button>
         <button
@@ -175,6 +220,11 @@ export default function Article() {
         >
           <Share2 className="w-4 h-4" /> {t("article.share")}
         </button>
+        {shareMsg && (
+          <span className="text-sm text-green-600 dark:text-green-400 font-sans">
+            {t("common.copied") || "Link copied!"}
+          </span>
+        )}
       </div>
 
       <CommentSection articleId={article.id} />

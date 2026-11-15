@@ -30,6 +30,7 @@ const defaultArticles = [
     authorPhoto: "",
     views: 42,
     claps: 12,
+    likedBy: ["demo-writer", "demo-reader"],
     commentCount: 1,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -49,6 +50,7 @@ const defaultArticles = [
     authorPhoto: "",
     views: 18,
     claps: 5,
+    likedBy: ["demo-admin"],
     commentCount: 0,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -157,6 +159,22 @@ export async function demoIncrementViews(id) {
 
 export async function demoClapArticle(id, count = 1) {
   if (state.articles[id]) { state.articles[id].claps = (state.articles[id].claps || 0) + count; saveState(state); }
+}
+
+export async function demoToggleLike(id, userId) {
+  if (!state.articles[id]) return false;
+  const likedBy = state.articles[id].likedBy || [];
+  if (likedBy.includes(userId)) {
+    state.articles[id].claps = Math.max(0, (state.articles[id].claps || 0) - 1);
+    state.articles[id].likedBy = likedBy.filter((u) => u !== userId);
+    saveState(state);
+    return false;
+  } else {
+    state.articles[id].claps = (state.articles[id].claps || 0) + 1;
+    state.articles[id].likedBy = [...likedBy, userId];
+    saveState(state);
+    return true;
+  }
 }
 
 // Users

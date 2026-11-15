@@ -91,6 +91,28 @@ export async function clapArticle(id, count = 1) {
   await updateDoc(doc(db, "articles", id), { claps: increment(count) });
 }
 
+export async function toggleLike(id, userId) {
+  if (isDemo()) return demo.demoToggleLike(id, userId);
+  const ref = doc(db, "articles", id);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return false;
+  const data = snap.data();
+  const likedBy = data.likedBy || [];
+  if (likedBy.includes(userId)) {
+    await updateDoc(ref, {
+      claps: increment(-1),
+      likedBy: arrayRemove(userId),
+    });
+    return false;
+  } else {
+    await updateDoc(ref, {
+      claps: increment(1),
+      likedBy: arrayUnion(userId),
+    });
+    return true;
+  }
+}
+
 // ---------- Users / Profiles ----------
 
 export async function getUserProfile(uid) {
