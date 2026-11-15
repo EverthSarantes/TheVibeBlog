@@ -5,12 +5,12 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { uploadImage } from "../../lib/imageUpload";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Heading1, Heading2, Heading3,
   List, ListOrdered, Quote, Code, ImageIcon, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight,
-  Undo, Redo, Upload,
+  Undo, Redo, Upload, Code as CodeIcon, Eye,
 } from "lucide-react";
 
 export default function RichEditor({ content, onChange, placeholder }) {
@@ -50,6 +50,8 @@ export default function RichEditor({ content, onChange, placeholder }) {
   );
 
   const fileInputRef = useRef(null);
+  const [showSource, setShowSource] = useState(false);
+  const [sourceHtml, setSourceHtml] = useState("");
 
   const addImage = () => {
     const url = window.prompt("Image URL (or use the upload button)");
@@ -72,6 +74,21 @@ export default function RichEditor({ content, onChange, placeholder }) {
   const addLink = () => {
     const url = window.prompt("URL");
     if (url) editor.chain().focus().setLink({ href: url }).run();
+  };
+
+  const toggleSource = () => {
+    if (!showSource) {
+      setSourceHtml(editor.getHTML());
+    } else {
+      editor.commands.setContent(sourceHtml, false);
+      onChange?.(sourceHtml);
+    }
+    setShowSource(!showSource);
+  };
+
+  const handleSourceChange = (e) => {
+    setSourceHtml(e.target.value);
+    onChange?.(e.target.value);
   };
 
   return (
@@ -105,8 +122,19 @@ export default function RichEditor({ content, onChange, placeholder }) {
         <span className="w-px h-6 bg-ink-200 dark:bg-ink-700 mx-1" />
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo"><Undo className="w-4 h-4" /></ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo"><Redo className="w-4 h-4" /></ToolbarButton>
+        <span className="w-px h-6 bg-ink-200 dark:bg-ink-700 mx-1" />
+        <ToolbarButton onClick={toggleSource} active={showSource} title="View HTML source"><CodeIcon className="w-4 h-4" /></ToolbarButton>
       </div>
-      <EditorContent editor={editor} className="article-prose p-6 min-h-[300px] focus:outline-none [&_.ProseMirror]:min-h-[280px] [&_.ProseMirror]:cursor-text" />
+      {showSource ? (
+        <textarea
+          value={sourceHtml}
+          onChange={handleSourceChange}
+          className="w-full p-6 min-h-[300px] font-mono text-sm bg-ink-50 dark:bg-ink-900 text-ink-900 dark:text-ink-100 focus:outline-none resize-y"
+          spellCheck={false}
+        />
+      ) : (
+        <EditorContent editor={editor} className="article-prose p-6 min-h-[300px] focus:outline-none [&_.ProseMirror]:min-h-[280px] [&_.ProseMirror]:cursor-text" />
+      )}
     </div>
   );
 }
