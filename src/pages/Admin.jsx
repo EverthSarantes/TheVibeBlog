@@ -70,7 +70,7 @@ function AdminInner() {
 
   const handleRoleChange = async (uid, newRole) => {
     if (uid === user.uid) {
-      alert("You cannot change your own role.");
+      alert("No puedes cambiar tu propio rol.");
       return;
     }
     try {
@@ -91,7 +91,7 @@ function AdminInner() {
   };
 
   const handleDeleteArticle = async (id) => {
-    if (!window.confirm("Delete this article permanently?")) return;
+    if (!window.confirm("¿Eliminar este artículo permanentemente?")) return;
     try {
       await deleteArticle(id);
       setArticles((prev) => prev.filter((a) => a.id !== id));
@@ -108,7 +108,7 @@ function AdminInner() {
 
   const handleDeleteComment = async (commentId) => {
     if (!selectedArticle) return;
-    if (!window.confirm("Delete this comment?")) return;
+    if (!window.confirm("¿Eliminar este comentario?")) return;
     try {
       await deleteComment(selectedArticle.id, commentId);
       setComments((prev) => prev.filter((c) => c.id !== commentId));
@@ -135,9 +135,9 @@ function AdminInner() {
       {/* Tabs */}
       <div className="flex gap-2 mb-8 border-b border-ink-200 dark:border-ink-800">
         {[
-          { key: "users", label: "Users", icon: Users },
-          { key: "articles", label: "Articles", icon: FileText },
-          { key: "comments", label: "Comments", icon: MessageCircle },
+          { key: "users", label: "Usuarios", icon: Users },
+          { key: "articles", label: "Artículos", icon: FileText },
+          { key: "comments", label: "Comentarios", icon: MessageCircle },
         ].map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -165,10 +165,10 @@ function AdminInner() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-ink-200 dark:border-ink-800 text-left">
-                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">User</th>
-                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Email</th>
-                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Role</th>
-                      <th className="py-3 font-sans font-semibold text-ink-700 dark:text-ink-300">Actions</th>
+                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Usuario</th>
+                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Correo</th>
+                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Rol</th>
+                      <th className="py-3 font-sans font-semibold text-ink-700 dark:text-ink-300">Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -203,8 +203,8 @@ function AdminInner() {
                                 onChange={(e) => handleRoleChange(uid, e.target.value)}
                                 className="px-2 py-1 rounded-md border border-ink-300 dark:border-ink-600 bg-white dark:bg-ink-900 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                               >
-                                <option value="reader">Reader</option>
-                                <option value="writer">Writer</option>
+                                <option value="reader">Lector</option>
+                                <option value="writer">Escritor</option>
                                 <option value="admin">Admin</option>
                               </select>
                             )}
@@ -226,10 +226,10 @@ function AdminInner() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-ink-200 dark:border-ink-800 text-left">
-                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Title</th>
-                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Author</th>
-                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Status</th>
-                      <th className="py-3 font-sans font-semibold text-ink-700 dark:text-ink-300">Actions</th>
+                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Título</th>
+                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Autor</th>
+                      <th className="py-3 pr-4 font-sans font-semibold text-ink-700 dark:text-ink-300">Estado</th>
+                      <th className="py-3 font-sans font-semibold text-ink-700 dark:text-ink-300">Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -247,8 +247,8 @@ function AdminInner() {
                             onChange={(e) => handleStatusChange(a.id, e.target.value)}
                             className="px-2 py-1 rounded-md border border-ink-300 dark:border-ink-600 bg-white dark:bg-ink-900 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                           >
-                            <option value="draft">Draft</option>
-                            <option value="published">Published</option>
+                            <option value="draft">Borrador</option>
+                            <option value="published">Publicado</option>
                           </select>
                         </td>
                         <td className="py-3 flex gap-2">
@@ -273,10 +273,10 @@ function AdminInner() {
                 <div className="mt-8 p-6 rounded-md border border-ink-200 dark:border-ink-800">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-display text-lg font-bold text-ink-900 dark:text-white">
-                      Comments on "{selectedArticle.title}"
+                      Comentarios en "{selectedArticle.title}"
                     </h3>
                     <Button size="sm" variant="ghost" onClick={() => { setSelectedArticle(null); setComments([]); }}>
-                      Close
+                      Cerrar
                     </Button>
                   </div>
                   {loadingComments ? (
@@ -307,10 +307,10 @@ function AdminInner() {
           {tab === "comments" && (
             <div>
               <p className="text-sm text-ink-500 dark:text-ink-400 mb-4">
-                Select an article from the Articles tab to manage its comments.
+                Selecciona un artículo de la pestaña de Artículos para gestionar sus comentarios.
               </p>
               <Button onClick={() => setTab("articles")} variant="secondary">
-                Go to Articles
+                Ir a Artículos
               </Button>
             </div>
           )}

@@ -57,7 +57,7 @@ export default function Profile() {
   };
 
   if (loading) return <div className="py-32"><Spinner /></div>;
-  if (!profile) return <div className="py-32 text-center font-serif text-ink-500">User not found</div>;
+  if (!profile) return <div className="py-32 text-center font-serif text-ink-500">Usuario no encontrado</div>;
 
   return (
     <div className="container-page py-12 md:py-16">
@@ -78,14 +78,14 @@ export default function Profile() {
 
       {isMe && (
         <section className="mb-12 p-6 rounded-md border border-ink-200 dark:border-ink-800">
-          <h2 className="font-display text-xl font-bold mb-4 text-ink-900 dark:text-white">Edit profile</h2>
+          <h2 className="font-display text-xl font-bold mb-4 text-ink-900 dark:text-white">Editar perfil</h2>
           <div className="space-y-4 max-w-md">
             <ImageUploader
               value={photoURL}
               onChange={setPhotoURL}
-              label="Profile photo"
+              label="Foto de perfil"
             />
-            <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} label="Name" />
+            <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} label="Nombre" />
             <Textarea value={bio} onChange={(e) => setBio(e.target.value)} label={t("profile.bio")} rows={3} />
             <div className="flex items-center gap-3">
               <Button onClick={handleSave} disabled={saving}>{saving ? "..." : t("profile.save")}</Button>
@@ -97,7 +97,7 @@ export default function Profile() {
 
       <h2 className="font-display text-2xl font-bold mb-6 text-ink-900 dark:text-white">{t("profile.articles")}</h2>
       {articles.length === 0 ? (
-        <p className="text-ink-500 font-serif italic">No articles yet.</p>
+        <p className="text-ink-500 font-serif italic">Aún no hay artículos.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map((a) => <ArticleCard key={a.id} article={a} />)}

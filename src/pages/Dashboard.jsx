@@ -126,7 +126,7 @@ function DashboardInner() {
                   </p>
                 </div>
                 <Link to={`/edit/${a.id}`}>
-                  <Button size="sm" variant="secondary"><Edit className="w-3.5 h-3.5 mr-1" /> Edit</Button>
+                  <Button size="sm" variant="secondary"><Edit className="w-3.5 h-3.5 mr-1" /> Editar</Button>
                 </Link>
               </li>
             ))}

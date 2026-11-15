@@ -9,6 +9,7 @@ import Button from "../components/ui/Button";
 import DOMPurify from "dompurify";
 import { Heart, Eye, Clock, Trash2, Edit, Share2 } from "lucide-react";
 import { format } from "date-fns";
+import { es as esLocale } from "date-fns/locale";
 
 export default function Article() {
   const { slug } = useParams();
@@ -89,7 +90,7 @@ export default function Article() {
   };
 
   if (loading) return <div className="py-32"><Spinner /></div>;
-  if (!article) return <div className="py-32 text-center font-serif text-ink-500">Article not found</div>;
+  if (!article) return <div className="py-32 text-center font-serif text-ink-500">Artículo no encontrado</div>;
 
   const date = article.publishedAt?.toDate ? article.publishedAt.toDate() : (article.publishedAt ? new Date(article.publishedAt) : null);
   const readTime = Math.max(1, Math.round((article.content?.replace(/<[^>]*>/g, "").split(/\s+/).length || 0) / 200));
@@ -165,7 +166,7 @@ export default function Article() {
             {article.authorName}
           </Link>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-500 dark:text-ink-400 mt-0.5">
-            {date && <time>{format(date, "MMMM d, yyyy")}</time>}
+            {date && <time>{format(date, "d 'de' MMMM, yyyy", { locale: esLocale })}</time>}
             <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{readTime} {t("article.minRead")}</span>
             <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{article.views || 0}</span>
           </div>

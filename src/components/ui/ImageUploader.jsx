@@ -16,7 +16,7 @@ export default function ImageUploader({ value, onChange, label }) {
       const dataUrl = await uploadImage(file);
       onChange(dataUrl);
     } catch (err) {
-      setError(err.message || "Upload failed");
+      setError(err.message || "Error al subir la imagen");
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -50,12 +50,12 @@ export default function ImageUploader({ value, onChange, label }) {
           className="w-full h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
         >
           {uploading ? (
-            <span className="text-sm">Uploading...</span>
+            <span className="text-sm">Subiendo...</span>
           ) : (
             <>
               <Upload className="w-6 h-6" />
-              <span className="text-sm font-medium">Select image</span>
-              <span className="text-xs">JPG, PNG, WebP (max 1200px)</span>
+              <span className="text-sm font-medium">Seleccionar imagen</span>
+              <span className="text-xs">JPG, PNG, WebP (máx. 2400px)</span>
             </>
           )}
         </button>

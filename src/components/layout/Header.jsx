@@ -43,12 +43,14 @@ export default function Header() {
         </div>
 
         <nav className="flex items-center gap-2">
+          {/* Language toggle hidden - Spanish only. Functionality preserved for future use.
           <button
             onClick={switchLang}
             className="px-2 py-1 text-xs font-semibold rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
           >
             {i18n.language === "es" ? "EN" : "ES"}
           </button>
+          */}
           <button
             onClick={toggle}
             className="p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"

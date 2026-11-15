@@ -6,6 +6,7 @@ import Button from "../ui/Button";
 import Textarea from "../ui/Textarea";
 import { Trash2, MessageCircle } from "lucide-react";
 import { format } from "date-fns";
+import { es as esLocale } from "date-fns/locale";
 
 export default function CommentSection({ articleId }) {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ export default function CommentSection({ articleId }) {
   };
 
   const remove = async (id) => {
-    if (!window.confirm("Delete comment?")) return;
+    if (!window.confirm("¿Eliminar comentario?")) return;
     await deleteComment(articleId, id);
     await load();
   };
@@ -101,7 +102,7 @@ export default function CommentSection({ articleId }) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-sans font-semibold text-sm text-ink-900 dark:text-white">{c.authorName}</span>
-                    {date && <span className="text-xs text-ink-400">{format(date, "MMM d, yyyy")}</span>}
+                    {date && <span className="text-xs text-ink-400">{format(date, "d MMM, yyyy", { locale: esLocale })}</span>}
                     {canDelete && (
                       <button onClick={() => remove(c.id)} className="ml-auto text-ink-400 hover:text-red-600 transition-colors" aria-label="delete comment">
                         <Trash2 className="w-4 h-4" />

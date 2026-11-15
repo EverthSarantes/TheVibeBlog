@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Clock, Heart } from "lucide-react";
 import { format } from "date-fns";
+import { es as esLocale } from "date-fns/locale";
 
 export default function ArticleCard({ article }) {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export default function ArticleCard({ article }) {
         )}
         <div className="mt-3 flex items-center gap-3 text-xs text-ink-500 dark:text-ink-400 font-sans">
           {article.authorName && <span className="font-medium text-ink-700 dark:text-ink-300">{article.authorName}</span>}
-          {date && <span>{format(date, "MMM d, yyyy")}</span>}
+          {date && <span>{format(date, "d MMM, yyyy", { locale: esLocale })}</span>}
           <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{readTime} {t("article.minRead")}</span>
         </div>
         {article.tags?.length > 0 && (
