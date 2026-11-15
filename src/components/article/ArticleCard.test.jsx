@@ -34,3 +34,27 @@ describe("ArticleCard", () => {
     expect(screen.getByText(/John Doe/)).toBeInTheDocument();
   });
 });
+
+describe("ArticleCard without image", () => {
+  const article = {
+    id: "2",
+    title: "No Image Article",
+    subtitle: "Subtitle here",
+    content: "<p>Content</p>",
+    slug: "no-image-article",
+    tags: ["test"],
+    authorName: "Jane Doe",
+    claps: 0,
+    publishedAt: new Date().toISOString(),
+  };
+
+  it("renders without cover image", () => {
+    render(<MemoryRouter><ArticleCard article={article} /></MemoryRouter>);
+    expect(screen.getByText("No Image Article")).toBeInTheDocument();
+  });
+
+  it("shows first letter placeholder", () => {
+    render(<MemoryRouter><ArticleCard article={article} /></MemoryRouter>);
+    expect(screen.getByText("N")).toBeInTheDocument();
+  });
+});

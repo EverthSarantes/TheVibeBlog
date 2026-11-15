@@ -6,6 +6,7 @@ import { createArticle, updateArticle, getArticle } from "../lib/firestore";
 import AuthGuard from "../components/auth/AuthGuard";
 import RichEditor from "../components/editor/RichEditor";
 import Input from "../components/ui/Input";
+import ImageUploader from "../components/ui/ImageUploader";
 import Button from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 import { slugify } from "../lib/slugify";
@@ -115,10 +116,10 @@ function EditorInner() {
           onChange={(e) => setSubtitle(e.target.value)}
           placeholder={t("editor.subtitle")}
         />
-        <Input
+        <ImageUploader
           value={coverImage}
-          onChange={(e) => setCoverImage(e.target.value)}
-          placeholder={t("editor.coverImage")}
+          onChange={setCoverImage}
+          label={t("editor.coverImage")}
         />
         <Input
           value={tags}

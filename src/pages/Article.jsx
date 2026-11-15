@@ -139,10 +139,12 @@ export default function Article() {
       </div>
 
       {/* Cover image */}
-      {article.coverImage && (
+      {article.coverImage ? (
         <div className="my-10 -mx-6 md:-mx-8">
           <img src={article.coverImage} alt={article.title} className="w-full rounded-md" />
         </div>
+      ) : (
+        <div className="my-10 h-px bg-ink-200 dark:bg-ink-800" />
       )}
 
       {/* Content */}

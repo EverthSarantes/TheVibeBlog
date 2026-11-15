@@ -11,7 +11,7 @@ export default function ArticleCard({ article }) {
   return (
     <article className="group">
       <Link to={`/article/${article.slug}`} className="block">
-        {article.coverImage && (
+        {article.coverImage ? (
           <div className="aspect-[4/3] overflow-hidden rounded-md mb-4 bg-ink-100 dark:bg-ink-800">
             <img
               src={article.coverImage}
@@ -19,6 +19,10 @@ export default function ArticleCard({ article }) {
               className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-smooth"
               loading="lazy"
             />
+          </div>
+        ) : (
+          <div className="aspect-[4/3] rounded-md mb-4 bg-gradient-to-br from-ink-100 to-ink-200 dark:from-ink-800 dark:to-ink-900 flex items-center justify-center">
+            <span className="font-display text-4xl text-ink-300 dark:text-ink-600">{article.title?.[0]}</span>
           </div>
         )}
         <h2 className="font-display text-xl font-bold text-ink-900 dark:text-white group-hover:text-accent transition-colors leading-tight">

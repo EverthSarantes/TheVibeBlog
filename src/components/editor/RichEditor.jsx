@@ -5,11 +5,12 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { uploadImage } from "../../lib/imageUpload";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Heading1, Heading2, Heading3,
   List, ListOrdered, Quote, Code, ImageIcon, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight,
-  Undo, Redo,
+  Undo, Redo, Upload,
 } from "lucide-react";
 
 export default function RichEditor({ content, onChange, placeholder }) {
@@ -48,9 +49,24 @@ export default function RichEditor({ content, onChange, placeholder }) {
     </button>
   );
 
+  const fileInputRef = useRef(null);
+
   const addImage = () => {
-    const url = window.prompt("Image URL");
+    const url = window.prompt("Image URL (or use the upload button)");
     if (url) editor.chain().focus().setImage({ src: url }).run();
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const dataUrl = await uploadImage(file);
+      editor.chain().focus().setImage({ src: dataUrl }).run();
+    } catch (err) {
+      window.alert(err.message || "Upload failed");
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const addLink = () => {
@@ -79,7 +95,9 @@ export default function RichEditor({ content, onChange, placeholder }) {
         <ToolbarButton onClick={() => editor.chain().focus().setTextAlign("center").run()} active={editor.isActive({ textAlign: "center" })} title="Align center"><AlignCenter className="w-4 h-4" /></ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().setTextAlign("right").run()} active={editor.isActive({ textAlign: "right" })} title="Align right"><AlignRight className="w-4 h-4" /></ToolbarButton>
         <span className="w-px h-6 bg-ink-200 dark:bg-ink-700 mx-1" />
-        <ToolbarButton onClick={addImage} title="Image"><ImageIcon className="w-4 h-4" /></ToolbarButton>
+        <ToolbarButton onClick={addImage} title="Image URL"><ImageIcon className="w-4 h-4" /></ToolbarButton>
+        <ToolbarButton onClick={() => fileInputRef.current?.click()} title="Upload image"><Upload className="w-4 h-4" /></ToolbarButton>
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
         <ToolbarButton onClick={addLink} title="Link"><LinkIcon className="w-4 h-4" /></ToolbarButton>
         <span className="w-px h-6 bg-ink-200 dark:bg-ink-700 mx-1" />
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo"><Undo className="w-4 h-4" /></ToolbarButton>
