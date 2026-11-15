@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getArticleBySlug, incrementViews, toggleLike, deleteArticle } from "../lib/firestore";
+import { canPerform } from "../lib/rateLimiter";
 import { useAuth } from "../contexts/AuthContext";
 import CommentSection from "../components/comments/CommentSection";
 import Spinner from "../components/ui/Spinner";
@@ -72,6 +73,7 @@ export default function Article() {
       // Redirect to login or show message
       return;
     }
+    if (!canPerform("like", 1000)) return;
     const newLiked = await toggleLike(article.id, user.uid);
     setLiked(newLiked);
     setArticle((prev) => ({

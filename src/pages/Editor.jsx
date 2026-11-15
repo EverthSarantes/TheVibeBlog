@@ -134,6 +134,15 @@ function EditorInner() {
 
   const handleSave = async (publish = false) => {
     if (!title.trim()) return;
+    // Client-side validation
+    if (title.trim().length > 200) {
+      alert("El título es demasiado largo (máx. 200 caracteres).");
+      return;
+    }
+    if (content.length > 100000) {
+      alert("El contenido es demasiado largo.");
+      return;
+    }
     setSaving(true);
     const finalStatus = publish ? "published" : status;
     const slug = slugify(title) + "-" + Date.now().toString(36);

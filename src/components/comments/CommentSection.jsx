@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthContext";
 import { getComments, addComment, deleteComment } from "../../lib/firestore";
+import { canPerform } from "../../lib/rateLimiter";
 import Button from "../ui/Button";
 import Textarea from "../ui/Textarea";
 import { Trash2, MessageCircle } from "lucide-react";
@@ -33,6 +34,10 @@ export default function CommentSection({ articleId }) {
   const submit = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
+    if (!canPerform("comment", 3000)) {
+      alert("Por favor espera unos segundos antes de comentar de nuevo.");
+      return;
+    }
     setSubmitting(true);
     try {
       await addComment(articleId, {

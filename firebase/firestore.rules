@@ -5,26 +5,54 @@ service cloud.firestore {
     function isSignedIn() { return request.auth != null; }
     function isAdmin() { return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"; }
     function isWriter() { return isSignedIn() && (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ["writer","admin"]); }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+    function validString(val, maxLen) { return val is string && val.size() <= maxLen; }
+    function validArticle() {
+      return request.resource.data.keys().hasAll(["title", "content", "slug", "status", "authorId", "authorName"]) &&
+        validString(request.resource.data.title, 200) &&
+        validString(request.resource.data.content, 100000) &&
+        validString(request.resource.data.slug, 250) &&
+        request.resource.data.status in ["draft", "published"] &&
+        request.resource.data.authorId == request.auth.uid;
+    }
+    function validComment() {
+      return request.resource.data.keys().hasAll(["authorId", "authorName", "content"]) &&
+        validString(request.resource.data.content, 2000) &&
+        request.resource.data.authorId == request.auth.uid;
+    }
+    function validProfile() {
+      return validString(request.resource.data.displayName, 100) &&
+        validString(request.resource.data.bio, 500) &&
+        (request.resource.data.photoURL == "" || validString(request.resource.data.photoURL, 500000));
+    }
 
     // Users
     match /users/{uid} {
       allow read: if true;
-      allow create: if isSignedIn() && request.auth.uid == uid;
-      allow update: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+      allow create: if isSignedIn() && request.auth.uid == uid &&
+        request.resource.data.role in ["reader", "writer"] || isAdmin();
+      // Prevent privilege escalation: users cannot change their own role
+      allow update: if isSignedIn() && (
+        (request.auth.uid == uid && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["role"])) ||
+        isAdmin()
+      ) && validProfile();
       allow delete: if isAdmin();
     }
 
     // Articles
     match /articles/{articleId} {
       allow read: if resource.data.status == "published" || (isSignedIn() && (resource.data.authorId == request.auth.uid || isWriter()));
-      allow create: if isWriter();
-      allow update: if isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin());
+      allow create: if isWriter() && validArticle();
+      allow update: if isSignedIn() && (
+        (resource.data.authorId == request.auth.uid && validArticle()) ||
+        isAdmin()
+      );
       allow delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin());
 
       // Comments subcollection
       match /comments/{commentId} {
         allow read: if true;
-        allow create: if isSignedIn();
+        allow create: if isSignedIn() && validComment();
         allow delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin());
       }
     }
@@ -40,7 +68,9 @@ service cloud.firestore {
     // Newsletter
     match /newsletter/{id} {
       allow read: if isAdmin();
-      allow create: if true;
+      allow create: if request.resource.data.keys().hasAll(["email"]) &&
+        request.resource.data.email is string &&
+        request.resource.data.email.size() <= 254;
       allow delete: if isAdmin();
     }
   }
