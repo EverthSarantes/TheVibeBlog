@@ -62,6 +62,7 @@ function EditorInner() {
   const [saving, setSaving] = useState(false);
   const [draftRestored, setDraftRestored] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
+  const [saveMsg, setSaveMsg] = useState(null);
 
   const saveTimer = useRef(null);
 
@@ -164,16 +165,35 @@ function EditorInner() {
       if (isEdit) {
         await updateArticle(id, data);
         clearDraft(id);
-        const updated = await getArticle(id);
-        navigate(`/article/${updated.slug}`);
+        if (finalStatus === "published") {
+          const updated = await getArticle(id);
+          navigate(`/article/${updated.slug}`);
+        } else {
+          setSaveMsg("Borrador guardado correctamente.");
+          setTimeout(() => setSaveMsg(null), 3000);
+        }
       } else {
         const newSlug = slug;
         await createArticle({ ...data, slug: newSlug });
         clearDraft(null);
-        navigate(`/article/${newSlug}`);
+        if (finalStatus === "published") {
+          navigate(`/article/${newSlug}`);
+        } else {
+          // Stay on page, reset for new article
+          setTitle("");
+          setSubtitle("");
+          setContent("");
+          setTags("");
+          setCoverImage("");
+          setStatus("draft");
+          setSaveMsg("Borrador guardado correctamente.");
+          setTimeout(() => setSaveMsg(null), 3000);
+        }
       }
     } catch (e) {
       console.error(e);
+      setSaveMsg("Error al guardar.");
+      setTimeout(() => setSaveMsg(null), 3000);
     } finally {
       setSaving(false);
     }
@@ -270,6 +290,7 @@ function EditorInner() {
       <div className="mt-8 flex items-center justify-between gap-3">
         <div className="text-xs text-ink-400 dark:text-ink-500">
           {lastSaved && `Guardado automáticamente ${lastSaved.toLocaleTimeString()}`}
+          {saveMsg && <span className="ml-3 text-green-600 dark:text-green-400">{saveMsg}</span>}
         </div>
         <div className="flex gap-3">
           <Button onClick={() => handleSave(false)} disabled={saving} variant="secondary">
