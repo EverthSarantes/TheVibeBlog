@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X, ImageIcon, Trash2, Upload, Check } from "lucide-react";
 import { getImages, saveImage, deleteImage } from "../../lib/firestore";
 import { uploadImage } from "../../lib/imageUpload";
+import Button from "./Button";
 import Spinner from "./Spinner";
 
 export default function ImageLibraryPicker({ open, onClose, onSelect }) {
