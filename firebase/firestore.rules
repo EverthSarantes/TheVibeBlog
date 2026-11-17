@@ -76,12 +76,12 @@ service cloud.firestore {
 
     // Image Library
     match /images/{id} {
-      allow read: if isSignedIn();
+      allow read: if isWriter();
       allow create: if isWriter() &&
         request.resource.data.keys().hasAll(["url"]) &&
         request.resource.data.url is string &&
         request.resource.data.url.size() <= 500000;
-      allow delete: if isSignedIn() && (resource.data.createdBy == request.auth.uid || isAdmin());
+      allow delete: if isWriter() && (resource.data.createdBy == request.auth.uid || isAdmin());
     }
   }
 }

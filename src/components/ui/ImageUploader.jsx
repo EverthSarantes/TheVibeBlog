@@ -3,7 +3,7 @@ import { Upload, X, ImageIcon, Library } from "lucide-react";
 import { uploadImage } from "../../lib/imageUpload";
 import ImageLibraryPicker from "./ImageLibraryPicker";
 
-export default function ImageUploader({ value, onChange, label }) {
+export default function ImageUploader({ value, onChange, label, allowLibrary = true }) {
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,12 +52,12 @@ export default function ImageUploader({ value, onChange, label }) {
           </button>
         </div>
       ) : (
-        <div className="flex gap-3">
+        <div className={allowLibrary ? "flex gap-3" : ""}>
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading}
-            className="flex-1 h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+            className={`${allowLibrary ? "flex-1" : "w-full"} h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors disabled:opacity-50`}
           >
             {uploading ? (
               <span className="text-sm">Subiendo...</span>
@@ -69,15 +69,17 @@ export default function ImageUploader({ value, onChange, label }) {
               </>
             )}
           </button>
-          <button
-            type="button"
-            onClick={() => setShowLibrary(true)}
-            className="flex-1 h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors"
-          >
-            <Library className="w-6 h-6" />
-            <span className="text-sm font-medium">Elegir de biblioteca</span>
-            <span className="text-xs">Imágenes guardadas</span>
-          </button>
+          {allowLibrary && (
+            <button
+              type="button"
+              onClick={() => setShowLibrary(true)}
+              className="flex-1 h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors"
+            >
+              <Library className="w-6 h-6" />
+              <span className="text-sm font-medium">Elegir de biblioteca</span>
+              <span className="text-xs">Imágenes guardadas</span>
+            </button>
+          )}
         </div>
       )}
       <input

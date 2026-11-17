@@ -84,6 +84,7 @@ export default function Profile() {
               value={photoURL}
               onChange={setPhotoURL}
               label="Foto de perfil"
+              allowLibrary={false}
             />
             <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} label="Nombre" />
             <Textarea value={bio} onChange={(e) => setBio(e.target.value)} label={t("profile.bio")} rows={3} />
