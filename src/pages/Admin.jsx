@@ -250,6 +250,16 @@ function AdminInner() {
                             <option value="draft">Borrador</option>
                             <option value="published">Publicado</option>
                           </select>
+                          {a.status === "draft" && (
+                            <Button
+                              size="sm"
+                              variant="accent"
+                              className="ml-2"
+                              onClick={() => handleStatusChange(a.id, "published")}
+                            >
+                              Aprobar y publicar
+                            </Button>
+                          )}
                         </td>
                         <td className="py-3 flex gap-2">
                           <Link to={`/edit/${a.id}`}>

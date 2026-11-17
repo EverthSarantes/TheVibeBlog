@@ -47,7 +47,7 @@ export default function Editor() {
 
 function EditorInner() {
   const { t } = useTranslation();
-  const { user, profile } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = Boolean(id);
@@ -135,6 +135,11 @@ function EditorInner() {
 
   const handleSave = async (publish = false) => {
     if (!title.trim()) return;
+    // Only admins can publish
+    if (publish && !isAdmin) {
+      alert("Solo un administrador puede publicar artículos.");
+      return;
+    }
     // Client-side validation
     if (title.trim().length > 200) {
       alert("El título es demasiado largo (máx. 200 caracteres).");
@@ -296,9 +301,16 @@ function EditorInner() {
           <Button onClick={() => handleSave(false)} disabled={saving} variant="secondary">
             {saving ? "..." : t("editor.saveDraft")}
           </Button>
-          <Button onClick={() => handleSave(true)} disabled={saving}>
-            {saving ? "..." : t("editor.publish")}
-          </Button>
+          {isAdmin && (
+            <Button onClick={() => handleSave(true)} disabled={saving}>
+              {saving ? "..." : t("editor.publish")}
+            </Button>
+          )}
+          {!isAdmin && (
+            <p className="text-xs text-ink-500 dark:text-ink-400 self-center">
+              Solo un administrador puede publicar
+            </p>
+          )}
         </div>
       </div>
     </div>

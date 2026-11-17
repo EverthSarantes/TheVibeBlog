@@ -109,6 +109,9 @@ function DashboardInner() {
 
       <section>
         <h2 className="font-display text-xl font-bold mb-4 text-ink-900 dark:text-white">{t("dashboard.myArticles")}</h2>
+        <p className="text-sm text-ink-500 dark:text-ink-400 mb-4">
+          Los borradores deben ser aprobados por un administrador para ser publicados.
+        </p>
         {loading ? (
           <Spinner />
         ) : articles.length === 0 ? (

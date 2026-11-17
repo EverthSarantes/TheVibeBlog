@@ -44,7 +44,8 @@ service cloud.firestore {
       allow read: if resource.data.status == "published" || (isSignedIn() && (resource.data.authorId == request.auth.uid || isWriter()));
       allow create: if isWriter() && validArticle();
       allow update: if isSignedIn() && (
-        (resource.data.authorId == request.auth.uid && validArticle()) ||
+        (resource.data.authorId == request.auth.uid && validArticle() && 
+          (request.resource.data.status == resource.data.status || request.resource.data.status == "draft")) ||
         isAdmin()
       );
       allow delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin());
