@@ -9,11 +9,27 @@ A Medium-inspired personal blog, 100% vibecoded. Multi-author, with a rich text 
 ## Stack (cheapest & simplest)
 
 - **Frontend**: React + Vite + TailwindCSS, deployed to GitHub Pages (free).
-- **Backend**: Firebase (Auth with Google, Firestore, Storage) on the free Spark plan.
-- **Editor**: TipTap (rich text).
-- **i18n**: react-i18next (Spanish only, English preserved internally).
+- **Backend**: Firebase (Auth with Google, Firestore) on the free Spark plan. No Firebase Storage needed (images stored as base64).
+- **Editor**: TipTap (rich text) with HTML source view.
+- **Language**: Spanish only (i18n preserved internally for future use).
+- **Design**: Custom editorial design system (Playfair Display + Lora + Inter).
 
 No passwords are stored: authentication is delegated to Google via Firebase Auth. Only public content (articles, comments) and minimal profile data are persisted.
+
+## Features
+
+- 📝 Rich text editor with image upload and reusable library
+- 👥 Multi-author with invitation system (manual email notification)
+- 💬 Comments on articles
+- ❤️ Like toggle (one per user)
+- 🖼️ Reusable image library (upload or pick from library)
+- 📧 Newsletter subscription (manual email sending)
+- 🌙 Dark mode + responsive design
+- 👤 User profiles with photo upload
+- 🛡️ Admin panel (user management, article moderation, comment deletion)
+- 💾 Auto-save drafts to localStorage
+- 🔒 Content Security Policy + rate limiting + input validation
+- 📄 Privacy policy page with AI disclosure
 
 ## Quick start
 
