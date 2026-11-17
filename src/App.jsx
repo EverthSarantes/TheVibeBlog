@@ -20,7 +20,16 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <BrowserRouter basename={import.meta.env.VITE_BASE_PATH?.replace(/\/$/, "") || "/Blog"}>
+    <BrowserRouter basename={(() => {
+      const envBase = (import.meta.env.VITE_BASE_PATH || "/").replace(/\/$/, "");
+      const currentPath = window.location.pathname;
+      // If the current path starts with the configured base, use it (GitHub Pages)
+      if (envBase && envBase !== "/" && currentPath.startsWith(envBase)) {
+        return envBase;
+      }
+      // Otherwise use root (Firebase Hosting, Vercel, Netlify, etc.)
+      return "/";
+    })()}>
       <Layout>
         <Suspense fallback={<PageLoader />}>
           <Routes>

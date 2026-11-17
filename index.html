@@ -23,12 +23,15 @@
   </head>
   <body>
     <script>
-      // Redirect /Blog (no trailing slash) to /Blog/ for GitHub Pages / static hosts
+      // Redirect known base paths without trailing slash (GitHub Pages)
       (function () {
         var p = window.location.pathname;
-        var base = "/Blog";
-        if (p === base || p === base.toLowerCase()) {
-          window.location.replace(base + "/" + window.location.search + window.location.hash);
+        var bases = ["/Blog", "/TheVibeBlog"];
+        for (var i = 0; i < bases.length; i++) {
+          if (p === bases[i] || p === bases[i].toLowerCase()) {
+            window.location.replace(bases[i] + "/" + window.location.search + window.location.hash);
+            return;
+          }
         }
       })();
     </script>
