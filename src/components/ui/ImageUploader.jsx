@@ -1,11 +1,13 @@
 import { useRef, useState } from "react";
-import { Upload, X, ImageIcon } from "lucide-react";
+import { Upload, X, ImageIcon, Library } from "lucide-react";
 import { uploadImage } from "../../lib/imageUpload";
+import ImageLibraryPicker from "./ImageLibraryPicker";
 
 export default function ImageUploader({ value, onChange, label }) {
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [showLibrary, setShowLibrary] = useState(false);
 
   const handleFile = async (e) => {
     const file = e.target.files?.[0];
@@ -14,6 +16,9 @@ export default function ImageUploader({ value, onChange, label }) {
     setUploading(true);
     try {
       const dataUrl = await uploadImage(file);
+      // Save to library and select
+      const { saveImage } = await import("../../lib/firestore");
+      await saveImage(dataUrl, file.name);
       onChange(dataUrl);
     } catch (err) {
       setError(err.message || "Error al subir la imagen");
@@ -21,6 +26,10 @@ export default function ImageUploader({ value, onChange, label }) {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
     }
+  };
+
+  const handleLibrarySelect = (url) => {
+    onChange(url);
   };
 
   const handleRemove = () => {
@@ -43,22 +52,33 @@ export default function ImageUploader({ value, onChange, label }) {
           </button>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          disabled={uploading}
-          className="w-full h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
-        >
-          {uploading ? (
-            <span className="text-sm">Subiendo...</span>
-          ) : (
-            <>
-              <Upload className="w-6 h-6" />
-              <span className="text-sm font-medium">Seleccionar imagen</span>
-              <span className="text-xs">JPG, PNG, WebP (máx. 2400px)</span>
-            </>
-          )}
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="flex-1 h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+          >
+            {uploading ? (
+              <span className="text-sm">Subiendo...</span>
+            ) : (
+              <>
+                <Upload className="w-6 h-6" />
+                <span className="text-sm font-medium">Subir imagen</span>
+                <span className="text-xs">JPG, PNG, WebP</span>
+              </>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowLibrary(true)}
+            className="flex-1 h-32 rounded-md border-2 border-dashed border-ink-300 dark:border-ink-600 flex flex-col items-center justify-center gap-2 text-ink-500 dark:text-ink-400 hover:border-accent hover:text-accent transition-colors"
+          >
+            <Library className="w-6 h-6" />
+            <span className="text-sm font-medium">Elegir de biblioteca</span>
+            <span className="text-xs">Imágenes guardadas</span>
+          </button>
+        </div>
       )}
       <input
         ref={inputRef}
@@ -69,6 +89,12 @@ export default function ImageUploader({ value, onChange, label }) {
         aria-label={label || "Upload image"}
       />
       {error && <p className="mt-1.5 text-sm text-red-600">{error}</p>}
+
+      <ImageLibraryPicker
+        open={showLibrary}
+        onClose={() => setShowLibrary(false)}
+        onSelect={handleLibrarySelect}
+      />
     </div>
   );
 }

@@ -68,6 +68,7 @@ let state = loadState() || {
   comments: { a1: [{ id: "c1", authorId: "demo-writer", authorName: "Demo Writer", authorPhoto: "", content: "¡Excelente artículo!", createdAt: new Date().toISOString() }] },
   invitations: [],
   newsletter: [],
+  images: [],
   currentUser: "demo-admin",
 };
 
@@ -75,6 +76,7 @@ let state = loadState() || {
 if (!state.comments) state.comments = {};
 if (!state.newsletter) state.newsletter = [];
 if (!state.invitations) state.invitations = [];
+if (!state.images) state.images = [];
 
 let _listeners = [];
 export function getCurrentUser() {
@@ -281,6 +283,26 @@ function slugify(text) {
   return text.toString().toLowerCase().trim().replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
 }
 export { slugify };
+
+// Image library
+export async function demoGetImages() {
+  if (!state.images) state.images = [];
+  return state.images.map(toDoc);
+}
+
+export async function demoSaveImage(dataUrl, name) {
+  if (!state.images) state.images = [];
+  const img = { id: "img" + Date.now().toString(36), url: dataUrl, name: name || "image", createdAt: ts() };
+  state.images.push(img);
+  saveState(state);
+  return img.id;
+}
+
+export async function demoDeleteImage(id) {
+  if (!state.images) return;
+  state.images = state.images.filter((i) => i.id !== id);
+  saveState(state);
+}
 
 // Reset demo data
 export function resetDemo() {

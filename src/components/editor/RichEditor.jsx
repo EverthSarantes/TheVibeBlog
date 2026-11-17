@@ -7,6 +7,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import { useEffect, useRef, useState } from "react";
 import { uploadImage } from "../../lib/imageUpload";
+import ImageLibraryPicker from "../ui/ImageLibraryPicker";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Heading1, Heading2, Heading3,
   List, ListOrdered, Quote, Code, ImageIcon, Link as LinkIcon, AlignLeft, AlignCenter, AlignRight,
@@ -52,6 +53,7 @@ export default function RichEditor({ content, onChange, placeholder }) {
   const fileInputRef = useRef(null);
   const [showSource, setShowSource] = useState(false);
   const [sourceHtml, setSourceHtml] = useState("");
+  const [showLibrary, setShowLibrary] = useState(false);
 
   const addImage = () => {
     const url = window.prompt("Image URL (or use the upload button)");
@@ -117,6 +119,7 @@ export default function RichEditor({ content, onChange, placeholder }) {
         <span className="w-px h-6 bg-ink-200 dark:bg-ink-700 mx-1" />
         <ToolbarButton onClick={addImage} title="Image URL"><ImageIcon className="w-4 h-4" /></ToolbarButton>
         <ToolbarButton onClick={() => fileInputRef.current?.click()} title="Upload image"><Upload className="w-4 h-4" /></ToolbarButton>
+        <ToolbarButton onClick={() => setShowLibrary(true)} title="Pick from library"><ImageIcon className="w-4 h-4" /></ToolbarButton>
         <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
         <ToolbarButton onClick={addLink} title="Link"><LinkIcon className="w-4 h-4" /></ToolbarButton>
         <span className="w-px h-6 bg-ink-200 dark:bg-ink-700 mx-1" />
@@ -135,6 +138,12 @@ export default function RichEditor({ content, onChange, placeholder }) {
       ) : (
         <EditorContent editor={editor} className="article-prose p-6 min-h-[300px] focus:outline-none [&_.ProseMirror]:min-h-[280px] [&_.ProseMirror]:cursor-text" />
       )}
+
+      <ImageLibraryPicker
+        open={showLibrary}
+        onClose={() => setShowLibrary(false)}
+        onSelect={(url) => editor.chain().focus().setImage({ src: url }).run()}
+      />
     </div>
   );
 }

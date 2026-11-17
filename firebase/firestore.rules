@@ -73,5 +73,15 @@ service cloud.firestore {
         request.resource.data.email.size() <= 254;
       allow delete: if isAdmin();
     }
+
+    // Image Library
+    match /images/{id} {
+      allow read: if isSignedIn();
+      allow create: if isWriter() &&
+        request.resource.data.keys().hasAll(["url"]) &&
+        request.resource.data.url is string &&
+        request.resource.data.url.size() <= 500000;
+      allow delete: if isSignedIn() && (resource.data.createdBy == request.auth.uid || isAdmin());
+    }
   }
 }

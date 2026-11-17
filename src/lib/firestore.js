@@ -358,6 +358,46 @@ export async function getNewsletterSubscribers() {
   return result;
 }
 
+// ---------- Image Library ----------
+
+export async function getImages() {
+  if (isDemo()) return demo.demoGetImages();
+  const cacheKey = "images:all";
+  const cached = cache.cacheGet(cacheKey);
+  if (cached) return cached;
+
+  const snap = await getDocs(collection(db, "images"));
+  const result = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  cache.cacheSet(cacheKey, result, cache.TTL.MEDIUM);
+  return result;
+}
+
+export async function saveImage(dataUrl, name) {
+  if (isDemo()) {
+    const id = await demo.demoSaveImage(dataUrl, name);
+    cache.cacheInvalidate("images:all");
+    return id;
+  }
+  const ref = await addDoc(collection(db, "images"), {
+    url: dataUrl,
+    name: name || "image",
+    createdAt: serverTimestamp(),
+    createdBy: null,
+  });
+  cache.cacheInvalidate("images:all");
+  return ref.id;
+}
+
+export async function deleteImage(id) {
+  if (isDemo()) {
+    await demo.demoDeleteImage(id);
+    cache.cacheInvalidate("images:all");
+    return;
+  }
+  await deleteDoc(doc(db, "images", id));
+  cache.cacheInvalidate("images:all");
+}
+
 // ---------- Tags ----------
 
 export async function getAllTags() {
