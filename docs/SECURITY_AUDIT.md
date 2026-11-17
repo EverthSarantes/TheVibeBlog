@@ -1,4 +1,4 @@
-# Security Audit — VibeBlog
+# Security Audit — TheVibeBlog
 
 ## Threat Model
 The codebase, Firebase config, and Firestore rules are **public**. This document outlines risks and mitigations.

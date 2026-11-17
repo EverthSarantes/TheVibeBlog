@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "VibeBlog",
+    "name": "TheVibeBlog",
     "tagline": "Ideas que vibran"
   },
   "nav": {
@@ -44,7 +44,7 @@
     "draft": "Borrador"
   },
   "auth": {
-    "loginTitle": "Bienvenido a VibeBlog",
+    "loginTitle": "Bienvenido a TheVibeBlog",
     "loginSubtitle": "Inicia sesión para leer y escribir",
     "loginGoogle": "Continuar con Google",
     "reader": "Lector",

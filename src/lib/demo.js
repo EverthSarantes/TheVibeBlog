@@ -1,7 +1,7 @@
 // Demo mode: in-memory mock backend used when Firebase is not configured.
 // Activates automatically when VITE_FIREBASE_API_KEY is missing.
 
-const STORAGE_KEY = "vibeblog_demo";
+const STORAGE_KEY = "thevibeblog_demo";
 
 function loadState() {
   try {
@@ -18,10 +18,10 @@ function saveState(state) {
 const defaultArticles = [
   {
     id: "a1",
-    title: "Bienvenido a VibeBlog",
+    title: "Bienvenido a TheVibeBlog",
     subtitle: "Una plataforma de blogging inspirada en Medium",
-    content: "<p>Este es un <strong>artículo de ejemplo</strong>. Puedes editarlo o crear uno nuevo desde el panel.</p><p>VibeBlog soporta <em>texto enriquecido</em>, imágenes, citas y más.</p><blockquote>Las ideas que vibran, se comparten.</blockquote>",
-    slug: "bienvenido-a-vibeblog",
+    content: "<p>Este es un <strong>artículo de ejemplo</strong>. Puedes editarlo o crear uno nuevo desde el panel.</p><p>TheVibeBlog soporta <em>texto enriquecido</em>, imágenes, citas y más.</p><blockquote>Las ideas que vibran, se comparten.</blockquote>",
+    slug: "bienvenido-a-TheVibeBlog",
     coverImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200",
     tags: ["bienvenida", "demo"],
     status: "published",

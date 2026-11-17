@@ -11,7 +11,7 @@ import Button from "../components/ui/Button";
 import Spinner from "../components/ui/Spinner";
 import { slugify } from "../lib/slugify";
 
-const DRAFT_KEY = "vibeblog_draft";
+const DRAFT_KEY = "thevibeblog_draft";
 
 function getDraftKey(id) {
   return id ? `${DRAFT_KEY}_${id}` : DRAFT_KEY;

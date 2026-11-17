@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Design tokens - VibeBlog design system
+        // Design tokens - TheVibeBlog design system
         ink: {
           900: "#0a0a0a",
           800: "#1a1a1a",

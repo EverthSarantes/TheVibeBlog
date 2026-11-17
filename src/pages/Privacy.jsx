@@ -20,7 +20,7 @@ export default function Privacy() {
               Este sitio fue creado 100% por Inteligencia Artificial
             </h2>
             <p className="text-yellow-800 dark:text-yellow-200 font-serif leading-relaxed">
-              VibeBlog fue desarrollado completamente por IA (vibecoding). <strong>Ningún ser humano ha revisado,
+              TheVibeBlog fue desarrollado completamente por IA (vibecoding). <strong>Ningún ser humano ha revisado,
               auditado ni verificado el código fuente.</strong> Esto es parte de la gracia y el experimento de este blog.
               Sin embargo, esto significa que <strong> siempre existe el riesgo de vulnerabilidades de seguridad</strong> no detectadas. 
               Si decides iniciar sesión, lo haces bajo tu propia responsabilidad y asumiendo ese riesgo.

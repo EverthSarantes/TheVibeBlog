@@ -1,4 +1,4 @@
-# VibeBlog
+# TheVibeBlog
 
 A Medium-inspired personal blog, 100% vibecoded. Multi-author, with a rich text editor, likes, comments and newsletter.
 

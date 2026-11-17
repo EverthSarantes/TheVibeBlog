@@ -1,4 +1,4 @@
-# Design System — VibeBlog
+# Design System — TheVibeBlog
 
 A complete, editorial design system inspired by Reuters, The New York Times, and Medium.
 Applied consistently across the entire application.

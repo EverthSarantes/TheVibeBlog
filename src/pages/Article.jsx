@@ -31,7 +31,7 @@ export default function Article() {
           setLiked((a.likedBy || []).includes(user.uid));
         }
         if (a) {
-          document.title = `${a.title} — VibeBlog`;
+          document.title = `${a.title} — TheVibeBlog`;
           // JSON-LD structured data
           const script = document.createElement("script");
           script.type = "application/ld+json";
@@ -57,7 +57,7 @@ export default function Article() {
         setLoading(false);
       }
     })();
-    return () => { document.title = "VibeBlog"; };
+    return () => { document.title = "TheVibeBlog"; };
   }, [slug]);
 
   useEffect(() => {
