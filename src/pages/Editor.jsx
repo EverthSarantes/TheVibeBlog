@@ -150,7 +150,7 @@ function EditorInner() {
       return;
     }
     setSaving(true);
-    const finalStatus = publish ? "published" : status;
+    const finalStatus = (publish && isAdmin) ? "published" : "draft";
     const slug = slugify(title) + "-" + Date.now().toString(36);
     const data = {
       title: title.trim(),
@@ -277,17 +277,24 @@ function EditorInner() {
           onChange={(e) => setTags(e.target.value)}
           placeholder={t("editor.tags")}
         />
-        <div className="flex items-center gap-3">
-          <label className="text-sm font-sans font-medium text-ink-700 dark:text-ink-300">{t("editor.status")}:</label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="px-3 py-2 rounded-md border border-ink-300 dark:border-ink-600 bg-white dark:bg-ink-900 text-ink-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent"
-          >
-            <option value="draft">{t("editor.draft")}</option>
-            <option value="published">{t("editor.published")}</option>
-          </select>
-        </div>
+        {isAdmin && (
+          <div className="flex items-center gap-3">
+            <label className="text-sm font-sans font-medium text-ink-700 dark:text-ink-300">{t("editor.status")}:</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="px-3 py-2 rounded-md border border-ink-300 dark:border-ink-600 bg-white dark:bg-ink-900 text-ink-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+              <option value="draft">{t("editor.draft")}</option>
+              <option value="published">{t("editor.published")}</option>
+            </select>
+          </div>
+        )}
+        {!isAdmin && (
+          <p className="text-sm text-ink-500 dark:text-ink-400 italic">
+            Tu artículo se guardará como borrador y necesitará aprobación de un administrador para publicarse.
+          </p>
+        )}
       </div>
 
       <RichEditor content={content} onChange={setContent} placeholder={t("editor.content")} />
