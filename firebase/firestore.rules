@@ -41,7 +41,7 @@ service cloud.firestore {
 
     // Articles
     match /articles/{articleId} {
-      allow read: if resource.data.status == "published" || (isSignedIn() && (resource.data.authorId == request.auth.uid || isWriter()));
+      allow read: if resource.data.status == "published" || isSignedIn();
       allow create: if isWriter() && validArticle();
       allow update: if isSignedIn() && (
         (resource.data.authorId == request.auth.uid && validArticle() && 
