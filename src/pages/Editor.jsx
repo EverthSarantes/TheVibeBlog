@@ -235,7 +235,7 @@ function EditorInner() {
   return (
     <div className="max-w-article mx-auto px-6 md:px-8 py-12 md:py-16">
       {draftRestored && (
-        <div className="mb-6 p-3 rounded-md bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 flex items-center justify-between gap-3">
+        <div className="mb-6 p-3 rounded-md bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="text-sm text-yellow-800 dark:text-yellow-200">
             Borrador restaurado automáticamente.
           </p>

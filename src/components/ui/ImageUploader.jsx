@@ -52,7 +52,7 @@ export default function ImageUploader({ value, onChange, label, allowLibrary = t
           </button>
         </div>
       ) : (
-        <div className={allowLibrary ? "flex gap-3" : ""}>
+        <div className={allowLibrary ? "flex flex-col sm:flex-row gap-3" : ""}>
           <button
             type="button"
             onClick={() => inputRef.current?.click()}

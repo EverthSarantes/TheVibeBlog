@@ -153,7 +153,7 @@ export default function Article() {
       )}
 
       {/* Author row */}
-      <div className="mt-8 flex items-center gap-4 pb-8 border-b border-ink-200 dark:border-ink-800">
+      <div className="mt-8 flex flex-wrap items-center gap-4 pb-8 border-b border-ink-200 dark:border-ink-800">
         <Link to={`/u/${article.authorId}`} className="flex-shrink-0">
           {article.authorPhoto ? (
             <img src={article.authorPhoto} alt="" className="w-12 h-12 rounded-full ring-1 ring-ink-200 dark:ring-ink-700" />
@@ -207,7 +207,7 @@ export default function Article() {
       />
 
       {/* Actions */}
-      <div className="mt-12 flex items-center gap-4 pt-8 border-t border-ink-200 dark:border-ink-800">
+      <div className="mt-12 flex flex-wrap items-center gap-3 pt-8 border-t border-ink-200 dark:border-ink-800">
         <button
           onClick={handleLike}
           disabled={!user}
@@ -254,7 +254,7 @@ function NewsletterInline() {
     if (r === "ok") setEmail("");
   };
   return (
-    <form onSubmit={submit} className="flex gap-2 max-w-md">
+    <form onSubmit={submit} className="flex flex-col sm:flex-row gap-2 max-w-md">
       <input
         type="email"
         required

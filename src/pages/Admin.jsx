@@ -261,7 +261,7 @@ function AdminInner() {
                             </Button>
                           )}
                         </td>
-                        <td className="py-3 flex gap-2">
+                        <td className="py-3 flex flex-wrap gap-2">
                           <Link to={`/edit/${a.id}`}>
                             <Button size="sm" variant="secondary"><Edit className="w-3.5 h-3.5" /></Button>
                           </Link>

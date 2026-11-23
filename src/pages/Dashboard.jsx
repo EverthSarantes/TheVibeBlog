@@ -93,7 +93,7 @@ function DashboardInner() {
         <h2 className="font-display text-xl font-bold mb-4 flex items-center gap-2 text-ink-900 dark:text-white">
           <Users className="w-5 h-5" /> {t("dashboard.inviteWriter")}
         </h2>
-        <form onSubmit={handleInvite} className="flex gap-2 max-w-md">
+        <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-2 max-w-md">
           <Input
             type="email"
             value={inviteEmail}
