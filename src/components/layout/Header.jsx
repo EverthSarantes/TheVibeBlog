@@ -19,6 +19,8 @@ export default function Header() {
     localStorage.setItem("lang", next);
   };
 
+  const closeMenu = () => setMobileMenuOpen(false);
+
   return (
     <header className="sticky top-0 z-40 bg-surface/90 dark:bg-surface-dark/90 backdrop-blur border-b border-ink-200 dark:border-ink-800">
       <div className="max-w-container mx-auto px-6 md:px-8 py-4 flex items-center justify-between gap-6">
@@ -53,22 +55,26 @@ export default function Header() {
             {i18n.language === "es" ? "EN" : "ES"}
           </button>
           */}
-          <button
-            onClick={toggle}
-            className="p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
-            aria-label="toggle theme"
-          >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
-
-          {isWriter && (
-            <Button size="sm" onClick={() => navigate("/write")} className="hidden sm:inline-flex">
-              <PenSquare className="w-4 h-4 mr-1.5" /> {t("nav.write")}
-            </Button>
-          )}
 
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              {/* Mobile: menu button first, then profile avatar */}
+              {user && (
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="sm:hidden p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
+                  aria-label="menu"
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+              )}
+
+              {/* Desktop: write button + links */}
+              {isWriter && (
+                <Button size="sm" onClick={() => navigate("/write")} className="hidden sm:inline-flex">
+                  <PenSquare className="w-4 h-4 mr-1.5" /> {t("nav.write")}
+                </Button>
+              )}
               {isWriter && (
                 <Link to="/dashboard" className="text-sm text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white transition-colors hidden sm:block">
                   {t("nav.dashboard")}
@@ -79,6 +85,7 @@ export default function Header() {
                   <Shield className="w-3.5 h-3.5" /> Admin
                 </Link>
               )}
+
               <Link to={`/u/${profile?.uid || user.uid}`} className="block">
                 {(profile?.photoURL || user?.photoURL) ? (
                   <img src={profile?.photoURL || user?.photoURL} alt="" className="w-8 h-8 rounded-full ring-1 ring-ink-200 dark:ring-ink-700 object-cover" />
@@ -88,44 +95,46 @@ export default function Header() {
                   </div>
                 )}
               </Link>
-              <button onClick={logout} aria-label="logout" className="p-2 text-ink-500 hover:text-ink-900 dark:hover:text-white transition-colors">
+
+              {/* Desktop: logout + theme toggle */}
+              <button onClick={toggle} aria-label="toggle theme" className="hidden sm:block p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
+                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <button onClick={logout} aria-label="logout" className="hidden sm:block p-2 text-ink-500 hover:text-ink-900 dark:hover:text-white transition-colors">
                 <LogOut className="w-4 h-4" />
               </button>
-
-              {/* Mobile menu button */}
-              {(isWriter || isAdmin) && (
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="sm:hidden p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
-                  aria-label="menu"
-                >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                </button>
-              )}
             </div>
           ) : (
-            <Button size="sm" onClick={login}>{t("nav.login")}</Button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggle}
+                className="p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
+                aria-label="toggle theme"
+              >
+                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <Button size="sm" onClick={login}>{t("nav.login")}</Button>
+            </div>
           )}
         </nav>
       </div>
 
       {/* Mobile menu dropdown */}
-      {user && mobileMenuOpen && (isWriter || isAdmin) && (
+      {user && mobileMenuOpen && (
         <div className="sm:hidden border-t border-ink-200 dark:border-ink-800 bg-surface dark:bg-surface-dark">
-          <div className="px-6 py-4 space-y-2">
+          <div className="px-6 py-4 space-y-1">
             {isWriter && (
-              <Link
-                to="/write"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
+              <button
+                onClick={() => { navigate("/write"); closeMenu(); }}
+                className="w-full flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
               >
                 <PenSquare className="w-4 h-4" /> {t("nav.write")}
-              </Link>
+              </button>
             )}
             {isWriter && (
               <Link
                 to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={closeMenu}
                 className="flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
               >
                 {t("nav.dashboard")}
@@ -134,12 +143,27 @@ export default function Header() {
             {isAdmin && (
               <Link
                 to="/admin"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={closeMenu}
                 className="flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
               >
                 <Shield className="w-4 h-4" /> Admin
               </Link>
             )}
+            <div className="border-t border-ink-200 dark:border-ink-800 pt-2 mt-2 space-y-1">
+              <button
+                onClick={() => { toggle(); closeMenu(); }}
+                className="w-full flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
+              >
+                {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {theme === "dark" ? "Modo claro" : "Modo oscuro"}
+              </button>
+              <button
+                onClick={() => { logout(); closeMenu(); }}
+                className="w-full flex items-center gap-2 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+              >
+                <LogOut className="w-4 h-4" /> Cerrar sesión
+              </button>
+            </div>
           </div>
         </div>
       )}
