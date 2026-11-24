@@ -1,15 +1,17 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import Button from "../ui/Button";
-import { PenSquare, Sun, Moon, User, LogOut, Search, Shield } from "lucide-react";
+import { PenSquare, Sun, Moon, User, LogOut, Search, Shield, Menu, X } from "lucide-react";
 
 export default function Header() {
   const { t, i18n } = useTranslation();
   const { user, profile, isWriter, isAdmin, login, logout } = useAuth();
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const switchLang = () => {
     const next = i18n.language === "es" ? "en" : "es";
@@ -89,12 +91,58 @@ export default function Header() {
               <button onClick={logout} aria-label="logout" className="p-2 text-ink-500 hover:text-ink-900 dark:hover:text-white transition-colors">
                 <LogOut className="w-4 h-4" />
               </button>
+
+              {/* Mobile menu button */}
+              {(isWriter || isAdmin) && (
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="sm:hidden p-2 rounded-md text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
+                  aria-label="menu"
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+              )}
             </div>
           ) : (
             <Button size="sm" onClick={login}>{t("nav.login")}</Button>
           )}
         </nav>
       </div>
+
+      {/* Mobile menu dropdown */}
+      {user && mobileMenuOpen && (isWriter || isAdmin) && (
+        <div className="sm:hidden border-t border-ink-200 dark:border-ink-800 bg-surface dark:bg-surface-dark">
+          <div className="px-6 py-4 space-y-2">
+            {isWriter && (
+              <Link
+                to="/write"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
+              >
+                <PenSquare className="w-4 h-4" /> {t("nav.write")}
+              </Link>
+            )}
+            {isWriter && (
+              <Link
+                to="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
+              >
+                {t("nav.dashboard")}
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 py-2 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"
+              >
+                <Shield className="w-4 h-4" /> Admin
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
